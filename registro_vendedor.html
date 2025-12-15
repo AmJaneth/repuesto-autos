@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Vendedor - RepuestosYa</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #2563eb;
+        --secondary: #f59e0b;
+        --dark: #0f172a;
+        --light: #f8fafc;
+        --accent: #10b981;
+        --gray: #64748b;
+        --error: #ef4444;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+        padding: 2rem 1rem;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: fadeInDown 0.6s ease;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .logo span {
+        color: var(--secondary);
+      }
+
+      .subtitle {
+        color: var(--gray);
+        font-size: 1.1rem;
+      }
+
+      /* Info Banner */
+      .info-banner {
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        border-left: 4px solid var(--primary);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        animation: fadeInUp 0.6s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .banner-title {
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+
+      .banner-list {
+        color: var(--gray);
+        font-size: 0.95rem;
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .banner-list li {
+        padding: 0.25rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+      }
+
+      .banner-list li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      /* Card */
+      .card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.6s ease;
+      }
+
+      .form-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .form-description {
+        color: var(--gray);
+        margin-bottom: 2.5rem;
+      }
+
+      /* Section Headers */
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 2rem 0 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      .section-header:first-of-type {
+        margin-top: 0;
+      }
+
+      .section-icon {
+        font-size: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      /* Form Fields */
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group.full-width {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+      }
+
+      .required {
+        color: var(--error);
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        font-size: 1.2rem;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        padding-left: 3rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+        font-family: inherit;
+      }
+
+      textarea {
+        padding-left: 1rem;
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+      }
+
+      input.error,
+      select.error {
+        border-color: var(--error);
+      }
+
+      .error-message {
+        color: var(--error);
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .help-text {
+        font-size: 0.85rem;
+        color: var(--gray);
+        margin-top: 0.5rem;
+      }
+
+      /* Select styling */
+      select {
+        appearance: none;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2364748B"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 20px;
+        cursor: pointer;
+      }
+
+      /* Multi-select brands */
+      .brands-selector {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.75rem;
+        padding: 1rem;
+        background: var(--light);
+        border-radius: 10px;
+        border: 2px solid #e2e8f0;
+      }
+
+      .brand-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .brand-checkbox:hover {
+        background: #f1f5f9;
+      }
+
+      .brand-checkbox input[type="checkbox"] {
+        width: auto;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+      }
+
+      .brand-checkbox label {
+        margin: 0;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+
+      /* Checkbox */
+      .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin: 2rem 0;
+        padding: 1.25rem;
+        background: var(--light);
+        border-radius: 10px;
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        width: auto;
+        padding: 0;
+        margin-top: 0.25rem;
+        cursor: pointer;
+      }
+
+      .checkbox-group label {
+        margin: 0;
+        font-weight: 400;
+        cursor: pointer;
+      }
+
+      .checkbox-group a {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .checkbox-group a:hover {
+        text-decoration: underline;
+      }
+
+      /* Submit Button */
+      .submit-button {
+        width: 100%;
+        padding: 1.125rem 2rem;
+        background: var(--secondary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .submit-button:hover {
+        background: #d97706;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+      }
+
+      .submit-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .submit-button.loading {
+        pointer-events: none;
+      }
+
+      .submit-button.loading::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border: 3px solid white;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Success Screen */
+      .success-screen {
+        display: none;
+        text-align: center;
+        padding: 3rem 2rem;
+      }
+
+      .success-screen.show {
+        display: block;
+        animation: fadeInUp 0.6s ease;
+      }
+
+      .success-icon {
+        width: 100px;
+        height: 100px;
+        background: var(--accent);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        font-size: 4rem;
+        animation: scaleIn 0.5s ease;
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+
+      .success-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 1rem;
+      }
+
+      .success-message {
+        color: var(--gray);
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+      }
+
+      .back-link {
+        display: inline-block;
+        color: var(--gray);
+        text-decoration: none;
+        margin-top: 2rem;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .back-link:hover {
+        color: var(--dark);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem 0.5rem;
+        }
+
+        .card {
+          padding: 2rem 1.5rem;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .form-title {
+          font-size: 1.5rem;
+        }
+
+        .section-header {
+          margin: 1.5rem 0 1rem;
+        }
+
+        .brands-selector {
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">Repuestos<span>Ya</span></div>
+        <p class="subtitle">Registro de Vendedor</p>
+      </div>
+
+      <!-- Info Banner -->
+      <div class="info-banner">
+        <div class="banner-title">🚀 Beneficios de vender en RepuestosYa</div>
+        <ul class="banner-list">
+          <li>Recibe solicitudes de clientes en tiempo real por WhatsApp</li>
+          <li>Solo pagas comisión cuando vendes (5% por venta)</li>
+          <li>Accede a clientes buscando repuestos para marcas específicas</li>
+          <li>Gestiona todas tus ofertas y ventas desde tu dashboard</li>
+        </ul>
+      </div>
+
+      <!-- Card -->
+      <div class="card">
+        <h1 class="form-title">Registro de Vendedor</h1>
+        <p class="form-description">
+          Completa el formulario para comenzar a vender repuestos
+        </p>
+
+        <form id="registroVendedorForm">
+          <!-- Datos del Negocio -->
+          <div class="section-header">
+            <span class="section-icon">🏪</span>
+            <h2 class="section-title">Datos del Negocio</h2>
+          </div>
+
+          <div class="form-group">
+            <label for="nombreNegocio"
+              >Nombre del negocio/tienda <span class="required">*</span></label
+            >
+            <div class="input-wrapper">
+              <span class="input-icon">🏪</span>
+              <input
+                type="text"
+                id="nombreNegocio"
+                name="nombreNegocio"
+                placeholder="Repuestos El Rápido"
+                required
+              />
+            </div>
+            <div class="error-message" id="error-nombreNegocio">
+              Ingresa el nombre de tu negocio
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="rut"
+                >RUT de la empresa <span class="required">*</span></label
+              >
+              <div class="input-wrapper">
+                <span class="input-icon">🆔</span>
+                <input
+                  type="text"
+                  id="rut"
+                  name="rut"
+                  placeholder="12.345.678-9"
+                  required
+                />
+              </div>
+              <p class="help-text">Para facturación electrónica</p>
+              <div class="error-message" id="error-rut">
+                Ingresa un RUT válido
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tipoNegocio"
+                >Tipo de negocio <span class="required">*</span></label
+              >
+              <div class="input-wrapper">
+                <span class="input-icon">📋</span>
+                <select id="tipoNegocio" name="tipoNegocio" required>
+                  <option value="">Selecciona</option>
+                  <option value="tienda">Tienda física</option>
+                  <option value="distribuidor">Distribuidor</option>
+                  <option value="taller">Taller mecánico</option>
+                  <option value="importador">Importador</option>
+                  <option value="online">Solo online</option>
+                </select>
+              </div>
+              <div class="error-message" id="error-tipoNegocio">
+                Selecciona el tipo de negocio
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="descripcion">Descripción de tu negocio</label>
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              placeholder="Cuéntanos sobre tu negocio, años de experiencia, especialidades, etc."
+            ></textarea>
+            <p class="help-text">
+              Esta información será visible para los clientes
+            </p>
+          </div>
+
+          <!-- Datos de Contacto -->
+          <div class="section-header">
+            <span class="section-icon">📞</span>
+            <h2 class="section-title">Datos de Contacto</h2>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombreContacto"
+                >Nombre del contacto <span class="required">*</span></label
+              >
+              <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <input
+                  type="text"
+                  id="nombreContacto"
+                  name="nombreContacto"
+                  placeholder="Pedro González"
+                  required
+                />
+              </div>
+              <div class="error-message" id="error-nombreContacto">
+                Ingresa el nombre del contacto
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="telefono"
+                >Teléfono (WhatsApp) <span class="required">*</span></label
+              >
+              <div class="input-wrapper">
+                <span class="input-icon">📱</span>
+                <input
+                  type="tel"
+                  id="telefono"
+                  name="telefono"
+                  placeholder="+56 9 1234 5678"
+                  required
+                />
+              </div>
+              <p class="help-text">Recibirás notificaciones aquí</p>
+              <div class="error-message" id="error-telefono">
+                Ingresa un número válido
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email"
+              >Correo electrónico <span class="required">*</span></label
+            >
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="contacto@mitienda.cl"
+                required
+              />
+            </div>
+            <div class="error-message" id="error-email">
+              Ingresa un email válido
+            </div>
+          </div>
+
+          <!-- Ubicación -->
+          <div class="section-header">
+            <span class="section-icon">📍</span>
+            <h2 class="section-title">Ubicación</h2>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="region">Región <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">🗺️</span>
+                <select id="region" name="region" required>
+                  <option value="">Selecciona tu región</option>
+                  <option value="metropolitana">Región Metropolitana</option>
+                  <option value="valparaiso">Valparaíso</option>
+                  <option value="biobio">Biobío</option>
+                  <option value="araucania">La Araucanía</option>
+                  <option value="loslagos">Los Lagos</option>
+                  <option value="coquimbo">Coquimbo</option>
+                  <option value="maule">Maule</option>
+                  <option value="losrios">Los Ríos</option>
+                </select>
+              </div>
+              <div class="error-message" id="error-region">
+                Selecciona tu región
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="comuna">Comuna <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">🏘️</span>
+                <select id="comuna" name="comuna" required disabled>
+                  <option value="">Primero selecciona una región</option>
+                </select>
+              </div>
+              <div class="error-message" id="error-comuna">
+                Selecciona tu comuna
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="direccion"
+              >Dirección de la tienda <span class="required">*</span></label
+            >
+            <div class="input-wrapper">
+              <span class="input-icon">📍</span>
+              <input
+                type="text"
+                id="direccion"
+                name="direccion"
+                placeholder="Av. Providencia 123, Local 5"
+                required
+              />
+            </div>
+            <p class="help-text">
+              Para que los clientes puedan visitarte o calcular envíos
+            </p>
+            <div class="error-message" id="error-direccion">
+              Ingresa la dirección
+            </div>
+          </div>
+
+          <!-- Marcas que Vendes -->
+          <div class="section-header">
+            <span class="section-icon">🚗</span>
+            <h2 class="section-title">Marcas de Vehículos</h2>
+          </div>
+
+          <div class="form-group">
+            <label
+              >¿Para qué marcas vendes repuestos?
+              <span class="required">*</span></label
+            >
+            <p class="help-text" style="margin-bottom: 1rem">
+              Selecciona todas las que apliquen. Solo recibirás solicitudes de
+              estas marcas.
+            </p>
+
+            <div class="brands-selector" id="brandsSelector">
+              <div class="brand-checkbox">
+                <input
+                  type="checkbox"
+                  id="brand-chevrolet"
+                  name="brands"
+                  value="chevrolet"
+                />
+                <label for="brand-chevrolet">Chevrolet</label>
+              </div>
+              <div class="brand-checkbox">
+                <input
+                  type="checkbox"
+                  id="brand-ford"
+                  name="brands"
+                  value="ford"
+                />
+                <label for="brand-ford">Ford</label>
+              </div>
+              <div class="brand-checkbox">
+                <input
+                  type="checkbox"
+                  id="brand-hyundai"
+                  name="brands"
+                  value="hyundai"
+                />
+                <label for="brand-hyundai">Hyundai</label>
+              </div>
+              <div class="brand-checkbox">
+                <input
+                  type="checkbox"
+                  id="brand-kia"
+                  name="brands"
+                  value="kia"
+                />
+                <label for="brand-kia">Kia</label>
+              </div>
+              <div class="brand-checkbox">
+                <input
+                  type="checkbox"
+                  id="brand-mazda"
+                  name="brands"
+                  value="mazda"
+                />
+                <label for="brand-mazda">Mazda</label>
+              </div>
+              <div class="brand-checkbox">
+                <input
+                  type="checkbox"
+                  id="brand-nissan"
+                  name="brands"
+                  value="nissan"
+                />
+                <label for="brand-nissan">Nissan</label>
+              </div>
+              <div class="brand-checkbox">
+                <input
+                  type="checkbox"
+                  id="brand-suzuki"
+                  name="brands"
+                  value="suzuki"
+                />
+                <label for="brand-suzuki">Suzuki</label>
+              </div>
+              <div class="brand-checkbox">
+                <input
+                  type="checkbox"
+                  id="brand-toyota"
+                  name="brands"
+                  value="toyota"
+                />
+                <label for="brand-toyota">Toyota</label>
+              </div>
+              <div class="brand-checkbox">
+                <input
+                  type="checkbox"
+                  id="brand-volkswagen"
+                  name="brands"
+                  value="volkswagen"
+                />
+                <label for="brand-volkswagen">Volkswagen</label>
+              </div>
+              <div class="brand-checkbox">
+                <input
+                  type="checkbox"
+                  id="brand-todas"
+                  name="brands"
+                  value="todas"
+                />
+                <label for="brand-todas"><strong>Todas</strong></label>
+              </div>
+            </div>
+            <div class="error-message" id="error-brands">
+              Selecciona al menos una marca
+            </div>
+          </div>
+
+          <!-- Datos de Pago -->
+          <div class="section-header">
+            <span class="section-icon">💳</span>
+            <h2 class="section-title">Datos de Pago</h2>
+          </div>
+
+          <div
+            class="info-banner"
+            style="
+              margin-bottom: 1.5rem;
+              background: linear-gradient(135deg, #fef3c7, #fde68a);
+              border-left-color: var(--secondary);
+            "
+          >
+            <div class="banner-title" style="color: var(--dark)">
+              💰 Información importante
+            </div>
+            <ul class="banner-list">
+              <li style="color: #78716c">
+                Recibirás tus pagos por transferencia bancaria
+              </li>
+              <li style="color: #78716c">
+                Los pagos se procesan dentro de 24-48 horas después de confirmar
+                la entrega
+              </li>
+              <li style="color: #78716c">
+                Se descontará automáticamente la comisión del 5% por venta
+              </li>
+            </ul>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="banco">Banco <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">🏦</span>
+                <select id="banco" name="banco" required>
+                  <option value="">Selecciona tu banco</option>
+                  <option value="banco-chile">Banco de Chile</option>
+                  <option value="banco-estado">Banco Estado</option>
+                  <option value="santander">Santander</option>
+                  <option value="bci">BCI</option>
+                  <option value="scotiabank">Scotiabank</option>
+                  <option value="itau">Itaú</option>
+                  <option value="security">Banco Security</option>
+                  <option value="falabella">Banco Falabella</option>
+                  <option value="ripley">Banco Ripley</option>
+                  <option value="consorcio">Banco Consorcio</option>
+                </select>
+              </div>
+              <div class="error-message" id="error-banco">
+                Selecciona tu banco
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tipoCuenta"
+                >Tipo de cuenta <span class="required">*</span></label
+              >
+              <div class="input-wrapper">
+                <span class="input-icon">💳</span>
+                <select id="tipoCuenta" name="tipoCuenta" required>
+                  <option value="">Selecciona</option>
+                  <option value="corriente">Cuenta Corriente</option>
+                  <option value="vista">Cuenta Vista</option>
+                  <option value="rut">Cuenta RUT</option>
+                </select>
+              </div>
+              <div class="error-message" id="error-tipoCuenta">
+                Selecciona el tipo de cuenta
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="numeroCuenta"
+                >Número de cuenta <span class="required">*</span></label
+              >
+              <div class="input-wrapper">
+                <span class="input-icon">🔢</span>
+                <input
+                  type="text"
+                  id="numeroCuenta"
+                  name="numeroCuenta"
+                  placeholder="12345678"
+                  required
+                />
+              </div>
+              <p class="help-text">Sin puntos ni guiones</p>
+              <div class="error-message" id="error-numeroCuenta">
+                Ingresa el número de cuenta
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="rutTitular"
+                >RUT del titular <span class="required">*</span></label
+              >
+              <div class="input-wrapper">
+                <span class="input-icon">🆔</span>
+                <input
+                  type="text"
+                  id="rutTitular"
+                  name="rutTitular"
+                  placeholder="12.345.678-9"
+                  required
+                />
+              </div>
+              <p class="help-text">Debe coincidir con el RUT de la empresa</p>
+              <div class="error-message" id="error-rutTitular">
+                Ingresa el RUT del titular
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nombreTitular"
+              >Nombre completo del titular
+              <span class="required">*</span></label
+            >
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input
+                type="text"
+                id="nombreTitular"
+                name="nombreTitular"
+                placeholder="Pedro González Martínez"
+                required
+              />
+            </div>
+            <p class="help-text">Tal como aparece en el banco</p>
+            <div class="error-message" id="error-nombreTitular">
+              Ingresa el nombre del titular
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="emailPago">Email para notificaciones de pago</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input
+                type="email"
+                id="emailPago"
+                name="emailPago"
+                placeholder="pagos@mitienda.cl"
+              />
+            </div>
+            <p class="help-text">
+              Opcional. Si es diferente al email principal
+            </p>
+          </div>
+
+          <!-- Términos y Condiciones -->
+          <div class="checkbox-group">
+            <input type="checkbox" id="terminos" name="terminos" required />
+            <label for="terminos">
+              Acepto los <a href="#" target="_blank">términos y condiciones</a>,
+              la <a href="#" target="_blank">política de privacidad</a> y las
+              <a href="#" target="_blank">comisiones de venta (5%)</a> de
+              RepuestosYa
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="submit-button">
+            Crear cuenta de vendedor
+            <span>🚀</span>
+          </button>
+
+          <a href="index.html" class="back-link">← Volver al inicio</a>
+        </form>
+
+        <!-- Success Screen -->
+        <div class="success-screen" id="successScreen">
+          <div class="success-icon">✓</div>
+          <h2 class="success-title">¡Registro exitoso!</h2>
+          <p class="success-message">
+            Tu cuenta de vendedor está en proceso de verificación.<br />
+            Te contactaremos en las próximas 24-48 horas para activar tu
+            cuenta.<br /><br />
+            <strong>Revisa tu WhatsApp y correo electrónico.</strong>
+          </p>
+          <button
+            type="button"
+            class="submit-button"
+            onclick="window.location.href='index.html'"
+          >
+            Volver al inicio
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Datos de comunas por región
+      const comunasPorRegion = {
+        metropolitana: [
+          "Santiago",
+          "Providencia",
+          "Las Condes",
+          "Ñuñoa",
+          "La Florida",
+          "Maipú",
+          "Puente Alto",
+          "San Bernardo",
+          "La Reina",
+          "Vitacura",
+        ],
+        valparaiso: [
+          "Valparaíso",
+          "Viña del Mar",
+          "Quilpué",
+          "Villa Alemana",
+          "Concón",
+          "Casablanca",
+          "Quillota",
+        ],
+        biobio: [
+          "Concepción",
+          "Talcahuano",
+          "Los Ángeles",
+          "Chillán",
+          "Coronel",
+          "San Pedro de la Paz",
+          "Hualpén",
+        ],
+        araucania: [
+          "Temuco",
+          "Padre Las Casas",
+          "Villarrica",
+          "Pucón",
+          "Angol",
+          "Victoria",
+        ],
+        loslagos: [
+          "Puerto Montt",
+          "Osorno",
+          "Puerto Varas",
+          "Castro",
+          "Ancud",
+          "Frutillar",
+        ],
+        coquimbo: ["La Serena", "Coquimbo", "Ovalle", "Illapel", "Vicuña"],
+        maule: ["Talca", "Curicó", "Linares", "Constitución", "Cauquenes"],
+        losrios: ["Valdivia", "La Unión", "Río Bueno", "Panguipulli"],
+      };
+
+      // Actualizar comunas según región seleccionada
+      document.getElementById("region").addEventListener("change", function () {
+        const comunaSelect = document.getElementById("comuna");
+        const region = this.value;
+
+        comunaSelect.innerHTML =
+          '<option value="">Selecciona tu comuna</option>';
+
+        if (region && comunasPorRegion[region]) {
+          comunaSelect.disabled = false;
+          comunasPorRegion[region].forEach((comuna) => {
+            const option = document.createElement("option");
+            option.value = comuna.toLowerCase().replace(/\s/g, "-");
+            option.textContent = comuna;
+            comunaSelect.appendChild(option);
+          });
+        } else {
+          comunaSelect.disabled = true;
+        }
+      });
+
+      // Checkbox "Todas las marcas"
+      document
+        .getElementById("brand-todas")
+        .addEventListener("change", function () {
+          const checkboxes = document.querySelectorAll('input[name="brands"]');
+          checkboxes.forEach((cb) => {
+            if (cb.id !== "brand-todas") {
+              cb.checked = this.checked;
+              cb.disabled = this.checked;
+            }
+          });
+        });
+
+      // Validación en tiempo real
+      document.querySelectorAll("input, select").forEach((input) => {
+        input.addEventListener("input", function () {
+          this.classList.remove("error");
+          const errorMessage = document.getElementById(`error-${this.id}`);
+          if (errorMessage) {
+            errorMessage.classList.remove("show");
+          }
+        });
+      });
+
+      // Submit del formulario
+      document
+        .getElementById("registroVendedorForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          let isValid = true;
+
+          // Validar campos requeridos
+          const requiredFields = this.querySelectorAll("[required]");
+          requiredFields.forEach((field) => {
+            if (
+              !field.value.trim() ||
+              (field.type === "checkbox" && !field.checked)
+            ) {
+              field.classList.add("error");
+              const errorMessage = document.getElementById(`error-${field.id}`);
+              if (errorMessage) {
+                errorMessage.classList.add("show");
+              }
+              isValid = false;
+            }
+          });
+
+          // Validar email
+          const email = document.getElementById("email");
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (email.value && !emailRegex.test(email.value)) {
+            email.classList.add("error");
+            document.getElementById("error-email").classList.add("show");
+            isValid = false;
+          }
+
+          // Validar teléfono
+          const telefono = document.getElementById("telefono");
+          const phoneRegex = /^\+?569\d{8}$/;
+          const value = telefono.value.replace(/\s/g, "");
+
+          if (value && !phoneRegex.test(value)) {
+            telefono.classList.add("error");
+            document.getElementById("error-telefono").classList.add("show");
+            isValid = false;
+          }
+
+          if (!isValid) return;
+
+          // Aquí puedes continuar con el envío del formulario
+          // await fetch(...)
+          // this.submit();
+        });
+    </script>
+  </body>
+</html>

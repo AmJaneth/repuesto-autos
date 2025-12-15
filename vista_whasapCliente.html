@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mensaje WhatsApp - Cliente</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: #0a0e27;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+      }
+
+      .mockup-section {
+        animation: fadeIn 0.6s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .section-title {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      .section-subtitle {
+        color: #64748b;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      /* WhatsApp Phone Mockup */
+      .phone-mockup {
+        background: white;
+        border-radius: 40px;
+        padding: 1rem;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        max-width: 380px;
+        margin: 0 auto;
+      }
+
+      .phone-screen {
+        background: #ece5dd;
+        border-radius: 30px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* WhatsApp Header */
+      .whatsapp-header {
+        background: #075e54;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: white;
+      }
+
+      .back-arrow {
+        font-size: 1.5rem;
+      }
+
+      .contact-info {
+        flex: 1;
+      }
+
+      .contact-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+
+      .contact-status {
+        font-size: 0.85rem;
+        opacity: 0.8;
+      }
+
+      /* Chat Area */
+      .chat-area {
+        padding: 1.5rem;
+        min-height: 500px;
+        background-image: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 10px,
+          rgba(0, 0, 0, 0.02) 10px,
+          rgba(0, 0, 0, 0.02) 20px
+        );
+      }
+
+      /* Message Bubble */
+      .message {
+        max-width: 85%;
+        margin-bottom: 1rem;
+        animation: slideIn 0.4s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message.received {
+        margin-right: auto;
+      }
+
+      .message-bubble {
+        background: white;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      .message-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: white;
+        font-size: 0.9rem;
+      }
+
+      .sender-name {
+        font-weight: 700;
+        color: #0f172a;
+        font-size: 0.95rem;
+      }
+
+      .message-content {
+        color: #1f2937;
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+
+      .message-content strong {
+        color: #0f172a;
+        display: block;
+        margin-top: 0.5rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .highlight-box {
+        background: #d1fae5;
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin: 0.75rem 0;
+        border-left: 3px solid #10b981;
+      }
+
+      .highlight-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.35rem;
+        font-size: 0.9rem;
+      }
+
+      .highlight-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .highlight-label {
+        color: #065f46;
+      }
+
+      .highlight-value {
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      .offer-list {
+        background: #fef3c7;
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin: 0.75rem 0;
+      }
+
+      .offer-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #fde68a;
+      }
+
+      .offer-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .offer-vendor {
+        font-weight: 600;
+        color: #0f172a;
+        margin-bottom: 0.25rem;
+      }
+
+      .offer-price {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #f59e0b;
+      }
+
+      .offer-details {
+        font-size: 0.85rem;
+        color: #78716c;
+      }
+
+      .cta-button {
+        display: block;
+        background: #10b981;
+        color: white;
+        text-align: center;
+        padding: 0.875rem;
+        border-radius: 8px;
+        font-weight: 700;
+        text-decoration: none;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .message-time {
+        font-size: 0.7rem;
+        color: #9ca3af;
+        text-align: right;
+        margin-top: 0.5rem;
+      }
+
+      /* Info Panel */
+      .info-panel {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      }
+
+      .info-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 1rem;
+      }
+
+      .info-description {
+        color: #64748b;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+      }
+
+      .info-section {
+        margin-bottom: 2rem;
+      }
+
+      .info-section-title {
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .info-list {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .info-list li {
+        padding: 0.5rem 0;
+        color: #475569;
+        position: relative;
+        padding-left: 1.5rem;
+      }
+
+      .info-list li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: 700;
+      }
+
+      .warning-box {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1.5rem;
+      }
+
+      .warning-title {
+        font-weight: 700;
+        color: #065f46;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .warning-text {
+        color: #047857;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .tech-note {
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 2rem;
+      }
+
+      .tech-note-title {
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 0.5rem;
+      }
+
+      .tech-note-text {
+        color: #475569;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .tech-note code {
+        background: #dbeafe;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        color: #1e40af;
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+
+        .phone-mockup {
+          max-width: 100%;
+        }
+      }
+
+      /* Comparison Table */
+      .comparison-table {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .comparison-title {
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 1rem;
+      }
+
+      .comparison-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding: 0.75rem;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .comparison-row:last-child {
+        border-bottom: none;
+      }
+
+      .comparison-label {
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+
+      .comparison-value {
+        font-weight: 600;
+        color: #0f172a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- WhatsApp Mockup -->
+      <div class="mockup-section">
+        <h2 class="section-title">📱 Vista del Cliente</h2>
+        <p class="section-subtitle">
+          Así recibe el cliente la notificación de ofertas
+        </p>
+
+        <div class="phone-mockup">
+          <div class="phone-screen">
+            <!-- WhatsApp Header -->
+            <div class="whatsapp-header">
+              <div class="back-arrow">←</div>
+              <div class="contact-info">
+                <div class="contact-name">RepuestosYa</div>
+                <div class="contact-status">en línea</div>
+              </div>
+            </div>
+
+            <!-- Chat Area -->
+            <div class="chat-area">
+              <div class="message received">
+                <div class="message-bubble">
+                  <div class="message-header">
+                    <div class="logo-icon">RY</div>
+                    <div class="sender-name">RepuestosYa</div>
+                  </div>
+
+                  <div class="message-content">
+                    🎉 <strong>¡Tienes nuevas ofertas!</strong>
+
+                    Tu solicitud de repuestos ha recibido respuestas de
+                    vendedores interesados.
+
+                    <div class="highlight-box">
+                      <div class="highlight-item">
+                        <span class="highlight-label">📦 Solicitud:</span>
+                        <span class="highlight-value">#12345</span>
+                      </div>
+                      <div class="highlight-item">
+                        <span class="highlight-label">🚗 Vehículo:</span>
+                        <span class="highlight-value">Toyota Corolla 2018</span>
+                      </div>
+                      <div class="highlight-item">
+                        <span class="highlight-label">💬 Ofertas:</span>
+                        <span class="highlight-value">5 vendedores</span>
+                      </div>
+                    </div>
+
+                    <strong>📊 Resumen de ofertas:</strong>
+                    <div class="offer-list">
+                      <div class="offer-item">
+                        <div class="offer-vendor">⭐ Repuestos El Rápido</div>
+                        <div class="offer-price">$45.000</div>
+                        <div class="offer-details">
+                          Ambos repuestos • 24hrs • 6 meses garantía
+                        </div>
+                      </div>
+                      <div class="offer-item">
+                        <div class="offer-vendor">AutoPartes Central</div>
+                        <div class="offer-price">$52.000</div>
+                        <div class="offer-details">
+                          Ambos repuestos • Inmediato • 1 año garantía
+                        </div>
+                      </div>
+                      <div class="offer-item">
+                        <div class="offer-vendor">+ 3 ofertas más</div>
+                        <div class="offer-price">Desde $38.000</div>
+                        <div class="offer-details">Ver todas las ofertas →</div>
+                      </div>
+                    </div>
+
+                    <strong>👉 Siguiente paso:</strong>
+                    Revisa todas las ofertas, compara precios y elige la que más
+                    te convenga.
+
+                    <a href="mis-ofertas.html?xyz789abc" class="cta-button">
+                      Ver todas las ofertas
+                    </a>
+                  </div>
+
+                  <div class="message-time">10:45</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Panel -->
+      <div class="mockup-section">
+        <div class="info-panel">
+          <h2 class="info-title">Detalles del Mensaje</h2>
+          <p class="info-description">
+            Este mensaje se envía automáticamente cuando uno o más vendedores
+            envían ofertas para la solicitud del cliente.
+          </p>
+
+          <div class="info-section">
+            <h3 class="info-section-title">✨ Características del mensaje</h3>
+            <ul class="info-list">
+              <li>Notificación inmediata cuando hay ofertas nuevas</li>
+              <li>Resumen con las mejores ofertas destacadas</li>
+              <li>Información del vehículo para contexto</li>
+              <li>Precios y condiciones visibles</li>
+              <li>Link directo para ver y comparar todas las ofertas</li>
+            </ul>
+          </div>
+
+          <div class="info-section">
+            <h3 class="info-section-title">🔐 Acceso seguro</h3>
+            <ul class="info-list">
+              <li>El link contiene un hash único del cliente</li>
+              <li>No requiere login para ver sus ofertas</li>
+              <li>Solo el cliente puede ver sus ofertas específicas</li>
+              <li>Link válido hasta que elija una oferta</li>
+            </ul>
+          </div>
+
+          <div class="warning-box">
+            <div class="warning-title">✅ Mejor práctica</div>
+            <div class="warning-text">
+              El mensaje muestra un preview de las 2-3 mejores ofertas (por
+              precio o calificación) para captar la atención del cliente, pero
+              siempre con un CTA claro para ver todas las opciones disponibles.
+            </div>
+          </div>
+
+          <div class="tech-note">
+            <div class="tech-note-title">🔧 Implementación Técnica</div>
+            <div class="tech-note-text">
+              El link incluye el hash del cliente:
+              <code>mis-ofertas/xyz789abc</code><br /><br />
+
+              <strong>Cuándo se envía:</strong>
+              <ul style="margin-top: 0.5rem; padding-left: 1.5rem">
+                <li>Primera oferta recibida → Enviar inmediatamente</li>
+                <li>Ofertas adicionales → Agrupar y enviar cada 30 min</li>
+                <li>Después de 24 horas → Recordatorio si no ha elegido</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="comparison-table">
+            <div class="comparison-title">
+              📊 Comparación: Cliente vs Vendedor
+            </div>
+
+            <div class="comparison-row">
+              <div>
+                <div class="comparison-label">Trigger:</div>
+                <div class="comparison-value">Cliente</div>
+              </div>
+              <div>
+                <div class="comparison-value">Cuando recibe ofertas</div>
+              </div>
+            </div>
+
+            <div class="comparison-row">
+              <div>
+                <div class="comparison-label">Trigger:</div>
+                <div class="comparison-value">Vendedor</div>
+              </div>
+              <div>
+                <div class="comparison-value">Cuando hay nueva solicitud</div>
+              </div>
+            </div>
+
+            <div class="comparison-row">
+              <div>
+                <div class="comparison-label">Acción esperada:</div>
+                <div class="comparison-value">Cliente</div>
+              </div>
+              <div>
+                <div class="comparison-value">Ver y elegir oferta</div>
+              </div>
+            </div>
+
+            <div class="comparison-row">
+              <div>
+                <div class="comparison-label">Acción esperada:</div>
+                <div class="comparison-value">Vendedor</div>
+              </div>
+              <div>
+                <div class="comparison-value">Ver solicitud y ofertar</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

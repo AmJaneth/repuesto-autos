@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - RepuestosYa</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #2563eb;
+        --secondary: #f59e0b;
+        --dark: #0f172a;
+        --light: #f8fafc;
+        --accent: #10b981;
+        --gray: #64748b;
+        --error: #ef4444;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: var(--light);
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 260px;
+        height: 100vh;
+        background: var(--dark);
+        color: white;
+        padding: 2rem 0;
+        overflow-y: auto;
+        z-index: 1000;
+      }
+
+      .logo {
+        padding: 0 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .logo-text {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: white;
+      }
+
+      .logo-text span {
+        color: var(--secondary);
+      }
+
+      .vendor-info {
+        padding: 0 2rem;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .vendor-name {
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+      }
+
+      .vendor-type {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .nav-menu {
+        list-style: none;
+      }
+
+      .nav-item {
+        margin-bottom: 0.25rem;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.875rem 2rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+      }
+
+      .nav-link.active {
+        background: var(--secondary);
+        color: white;
+      }
+
+      .nav-icon {
+        font-size: 1.2rem;
+      }
+
+      .badge {
+        margin-left: auto;
+        background: var(--error);
+        color: white;
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      /* Main Content */
+      .main-content {
+        margin-left: 260px;
+        padding: 2rem;
+      }
+
+      .header {
+        background: white;
+        padding: 1.5rem 2rem;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .header-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--dark);
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: var(--secondary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #d97706;
+        transform: translateY(-2px);
+      }
+
+      .btn-outline {
+        background: white;
+        color: var(--gray);
+        border: 2px solid #e2e8f0;
+      }
+
+      .btn-outline:hover {
+        border-color: var(--gray);
+        color: var(--dark);
+      }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1rem;
+      }
+
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+      }
+
+      .stat-icon.blue {
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      }
+
+      .stat-icon.yellow {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+      }
+
+      .stat-icon.green {
+        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      }
+
+      .stat-icon.purple {
+        background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        color: var(--gray);
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+      }
+
+      .stat-change {
+        font-size: 0.85rem;
+        color: var(--accent);
+        margin-top: 0.5rem;
+      }
+
+      /* Tabs */
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        background: white;
+        padding: 0.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .tab {
+        flex: 1;
+        padding: 0.875rem 1.5rem;
+        background: transparent;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--gray);
+        transition: all 0.3s ease;
+      }
+
+      .tab.active {
+        background: var(--secondary);
+        color: white;
+      }
+
+      .tab:hover:not(.active) {
+        background: var(--light);
+      }
+
+      /* Content Sections */
+      .content-section {
+        display: none;
+      }
+
+      .content-section.active {
+        display: block;
+      }
+
+      /* Request/Offer/Sale Card */
+      .card-item {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .card-item:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1.5rem;
+      }
+
+      .card-id {
+        font-size: 0.9rem;
+        color: var(--gray);
+        margin-bottom: 0.5rem;
+      }
+
+      .card-title-text {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      .time-badge {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        color: #92400e;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .status-accepted {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .status-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .card-items {
+        background: var(--light);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+      }
+
+      .card-items-title {
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .card-items-list {
+        color: var(--gray);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .card-info {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+
+      .card-actions {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .price-display {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin: 1rem 0;
+      }
+
+      .price-green {
+        color: var(--accent);
+      }
+
+      .sale-details {
+        background: var(--light);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-top: 1rem;
+      }
+
+      .sale-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        font-size: 0.95rem;
+      }
+
+      .sale-label {
+        color: var(--gray);
+      }
+
+      .sale-value {
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .profile-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+      }
+
+      .profile-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 1.5rem;
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 15px;
+      }
+
+      .empty-icon {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+      }
+
+      .empty-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .empty-text {
+        color: var(--gray);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+          transition: transform 0.3s ease;
+        }
+
+        .sidebar.open {
+          transform: translateX(0);
+        }
+
+        .main-content {
+          margin-left: 0;
+          padding: 1rem;
+        }
+
+        .header {
+          flex-direction: column;
+          gap: 1rem;
+          align-items: stretch;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .tabs {
+          flex-direction: column;
+        }
+
+        .card-actions {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-text">Repuestos<span>Ya</span></div>
+      </div>
+
+      <div class="vendor-info">
+        <div class="vendor-name">Repuestos El Rápido</div>
+        <div class="vendor-type">Tienda física</div>
+      </div>
+
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <div class="nav-link active" onclick="showSection('dashboard')">
+              <span class="nav-icon">📊</span>
+              <span>Dashboard</span>
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" onclick="showSection('solicitudes')">
+              <span class="nav-icon">🔔</span>
+              <span>Solicitudes</span>
+              <span class="badge">8</span>
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" onclick="showSection('ofertas')">
+              <span class="nav-icon">📤</span>
+              <span>Mis Ofertas</span>
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" onclick="showSection('ventas')">
+              <span class="nav-icon">✅</span>
+              <span>Ventas</span>
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" onclick="showSection('perfil')">
+              <span class="nav-icon">⚙️</span>
+              <span>Mi Perfil</span>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">
+              <span class="nav-icon">🚪</span>
+              <span>Cerrar Sesión</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Section -->
+      <div id="dashboard" class="content-section active">
+        <div class="header">
+          <h1 class="header-title">Dashboard</h1>
+          <div class="header-actions">
+            <button class="btn btn-outline">📅 Este mes</button>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div>
+                <div class="stat-label">Solicitudes activas</div>
+                <div class="stat-value">8</div>
+                <div class="stat-change">+3 nuevas hoy</div>
+              </div>
+              <div class="stat-icon blue">🔔</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <div>
+                <div class="stat-label">Ofertas enviadas</div>
+                <div class="stat-value">24</div>
+                <div class="stat-change">+5 esta semana</div>
+              </div>
+              <div class="stat-icon yellow">📤</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <div>
+                <div class="stat-label">Ventas confirmadas</div>
+                <div class="stat-value">12</div>
+                <div class="stat-change">+2 pendientes de pago</div>
+              </div>
+              <div class="stat-icon green">✅</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <div>
+                <div class="stat-label">Ingresos del mes</div>
+                <div class="stat-value">$450K</div>
+                <div class="stat-change">+15% vs mes anterior</div>
+              </div>
+              <div class="stat-icon purple">💰</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="header" style="margin-bottom: 1rem">
+          <h2 style="font-size: 1.3rem; font-weight: 700">
+            Actividad reciente
+          </h2>
+        </div>
+
+        <div class="card-item">
+          <div class="card-header">
+            <div>
+              <div class="card-id">Solicitud #12347</div>
+              <div class="card-title-text">🚗 Toyota Corolla 2018</div>
+            </div>
+            <div class="time-badge">⏱️ Hace 15 min</div>
+          </div>
+
+          <div class="card-items">
+            <div class="card-items-title">📦 Repuestos solicitados:</div>
+            <div class="card-items-list">
+              • Pastillas de freno delanteras<br />
+              • Filtro de aceite
+            </div>
+          </div>
+
+          <div class="card-info">
+            <div class="info-item">
+              <span>📍</span>
+              <span>Santiago, RM</span>
+            </div>
+            <div class="info-item">
+              <span>👤</span>
+              <span>Cliente verificado</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-outline" style="flex: 0.3">
+              Ver detalles
+            </button>
+            <button
+              class="btn btn-primary"
+              style="flex: 1"
+              onclick="window.location.href='oferta.html'"
+            >
+              Enviar oferta <span>→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Solicitudes Section -->
+      <div id="solicitudes" class="content-section">
+        <div class="header">
+          <h1 class="header-title">Solicitudes Activas</h1>
+          <div class="header-actions">
+            <select class="btn btn-outline" style="cursor: pointer">
+              <option>Todas las marcas</option>
+              <option>Toyota</option>
+              <option>Nissan</option>
+              <option>Chevrolet</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Request 1 -->
+        <div class="card-item">
+          <div class="card-header">
+            <div>
+              <div class="card-id">Solicitud #12347</div>
+              <div class="card-title-text">🚗 Toyota Corolla 2018</div>
+            </div>
+            <div class="time-badge">⏱️ Hace 15 min</div>
+          </div>
+
+          <div class="card-items">
+            <div class="card-items-title">📦 Repuestos solicitados (2):</div>
+            <div class="card-items-list">
+              • Pastillas de freno delanteras<br />
+              • Filtro de aceite
+            </div>
+          </div>
+
+          <div class="card-info">
+            <div class="info-item">
+              <span>📍</span>
+              <span>Santiago, RM</span>
+            </div>
+            <div class="info-item">
+              <span>💬</span>
+              <span>3 ofertas recibidas</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-outline">Ver detalles</button>
+            <button
+              class="btn btn-primary"
+              onclick="window.location.href='oferta.html'"
+            >
+              Enviar oferta <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Request 2 -->
+        <div class="card-item">
+          <div class="card-header">
+            <div>
+              <div class="card-id">Solicitud #12346</div>
+              <div class="card-title-text">🚗 Nissan Sentra 2019</div>
+            </div>
+            <div class="time-badge">⏱️ Hace 1 hora</div>
+          </div>
+
+          <div class="card-items">
+            <div class="card-items-title">📦 Repuestos solicitados (1):</div>
+            <div class="card-items-list">• Amortiguadores traseros (par)</div>
+          </div>
+
+          <div class="card-info">
+            <div class="info-item">
+              <span>📍</span>
+              <span>Providencia, RM</span>
+            </div>
+            <div class="info-item">
+              <span>💬</span>
+              <span>1 oferta recibida</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-outline">Ver detalles</button>
+            <button
+              class="btn btn-primary"
+              onclick="window.location.href='oferta.html'"
+            >
+              Enviar oferta <span>→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mis Ofertas Section -->
+      <div id="ofertas" class="content-section">
+        <div class="header">
+          <h1 class="header-title">Mis Ofertas</h1>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" onclick="filterOffers('todas')">
+            Todas (24)
+          </button>
+          <button class="tab" onclick="filterOffers('pendientes')">
+            Pendientes (15)
+          </button>
+          <button class="tab" onclick="filterOffers('aceptadas')">
+            Aceptadas (6)
+          </button>
+          <button class="tab" onclick="filterOffers('rechazadas')">
+            Rechazadas (3)
+          </button>
+        </div>
+
+        <!-- Offer 1 - Pending -->
+        <div class="card-item">
+          <span class="status-badge status-pending">⏳ Pendiente</span>
+          <div class="card-id" style="margin-top: 1rem">Solicitud #12347</div>
+          <div class="card-title-text">🚗 Toyota Corolla 2018</div>
+
+          <div class="price-display">$45.000</div>
+
+          <div class="card-items">
+            <div class="card-items-title">Tu oferta incluye:</div>
+            <div class="card-items-list">
+              • Pastillas de freno delanteras (Nuevo - Original)<br />
+              • Filtro de aceite (Nuevo - Original)<br />
+              • Entrega: 24 horas<br />
+              • Garantía: 6 meses
+            </div>
+          </div>
+
+          <div class="card-info">
+            <div class="info-item">
+              <span>📅</span>
+              <span>Enviada hace 2 horas</span>
+            </div>
+            <div class="info-item">
+              <span>💬</span>
+              <span>4 ofertas en total</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Offer 2 - Accepted -->
+        <div class="card-item">
+          <span class="status-badge status-accepted">✅ Aceptada</span>
+          <div class="card-id" style="margin-top: 1rem">Solicitud #12340</div>
+          <div class="card-title-text">🚗 Nissan Sentra 2019</div>
+
+          <div class="price-display price-green">$38.000</div>
+
+          <div class="card-items">
+            <div class="card-items-title">Tu oferta incluye:</div>
+            <div class="card-items-list">
+              • Pastillas de freno delanteras<br />
+              • Entrega: Inmediata<br />
+              • Garantía: 3 meses
+            </div>
+          </div>
+
+          <div class="card-info">
+            <div class="info-item">
+              <span>📅</span>
+              <span>Aceptada hace 1 día</span>
+            </div>
+            <div class="info-item">
+              <span>💰</span>
+              <span>Pago confirmado</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-primary">
+              Ver detalles de entrega <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Offer 3 - Rejected -->
+        <div class="card-item">
+          <span class="status-badge status-rejected">❌ No seleccionada</span>
+          <div class="card-id" style="margin-top: 1rem">Solicitud #12338</div>
+          <div class="card-title-text">🚗 Toyota RAV4 2017</div>
+
+          <div class="price-display">$65.000</div>
+
+          <div class="card-items">
+            <div class="card-items-title">Tu oferta incluía:</div>
+            <div class="card-items-list">
+              • Amortiguadores traseros (par)<br />
+              • Entrega: 48 horas
+            </div>
+          </div>
+
+          <div class="card-info">
+            <div class="info-item">
+              <span>📅</span>
+              <span>Hace 2 días</span>
+            </div>
+            <div class="info-item">
+              <span>💬</span>
+              <span>Cliente eligió otra oferta</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ventas Section -->
+      <div id="ventas" class="content-section">
+        <div class="header">
+          <h1 class="header-title">Ventas Confirmadas</h1>
+          <div class="header-actions">
+            <button class="btn btn-outline">💰 $380.000 por cobrar</button>
+          </div>
+        </div>
+
+        <!-- Sale 1 -->
+        <div class="card-item">
+          <div class="card-header">
+            <div>
+              <div class="card-id">Venta #VTA-001</div>
+              <div class="card-title-text">🚗 Nissan Sentra 2019</div>
+            </div>
+            <div class="price-display price-green">$38.000</div>
+          </div>
+
+          <div class="card-items">
+            <div class="card-items-title">Productos vendidos:</div>
+            <div class="card-items-list">• Pastillas de freno delanteras</div>
+          </div>
+
+          <div class="sale-details">
+            <div class="sale-row">
+              <span class="sale-label">Total venta:</span>
+              <span class="sale-value">$38.000</span>
+            </div>
+            <div class="sale-row">
+              <span class="sale-label">Comisión (5%):</span>
+              <span class="sale-value" style="color: var(--error)"
+                >-$1.900</span
+              >
+            </div>
+            <div
+              class="sale-row"
+              style="
+                border-top: 2px solid #e2e8f0;
+                padding-top: 0.75rem;
+                margin-top: 0.5rem;
+              "
+            >
+              <span class="sale-label"><strong>A recibir:</strong></span>
+              <span
+                class="sale-value"
+                style="color: var(--accent); font-size: 1.2rem"
+                >$36.100</span
+              >
+            </div>
+          </div>
+
+          <div class="card-info" style="margin-top: 1rem">
+            <div class="info-item">
+              <span>📅</span>
+              <span>Vendido hace 1 día</span>
+            </div>
+            <div class="info-item">
+              <span>✅</span>
+              <span>Entrega confirmada</span>
+            </div>
+            <div class="info-item">
+              <span>💳</span>
+              <span>Pago procesándose</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sale 2 -->
+        <div class="card-item">
+          <div class="card-header">
+            <div>
+              <div class="card-id">Venta #VTA-002</div>
+              <div class="card-title-text">🚗 Toyota Corolla 2018</div>
+            </div>
+            <div class="price-display price-green">$45.000</div>
+          </div>
+
+          <div class="card-items">
+            <div class="card-items-title">Productos vendidos:</div>
+            <div class="card-items-list">
+              • Pastillas de freno delanteras<br />
+              • Filtro de aceite
+            </div>
+          </div>
+
+          <div class="sale-details">
+            <div class="sale-row">
+              <span class="sale-label">Total venta:</span>
+              <span class="sale-value">$45.000</span>
+            </div>
+            <div class="sale-row">
+              <span class="sale-label">Comisión (5%):</span>
+              <span class="sale-value" style="color: var(--error)"
+                >-$2.250</span
+              >
+            </div>
+            <div
+              class="sale-row"
+              style="
+                border-top: 2px solid #e2e8f0;
+                padding-top: 0.75rem;
+                margin-top: 0.5rem;
+              "
+            >
+              <span class="sale-label"><strong>A recibir:</strong></span>
+              <span
+                class="sale-value"
+                style="color: var(--accent); font-size: 1.2rem"
+                >$42.750</span
+              >
+            </div>
+          </div>
+
+          <div class="card-info" style="margin-top: 1rem">
+            <div class="info-item">
+              <span>📅</span>
+              <span>Vendido hace 3 días</span>
+            </div>
+            <div class="info-item">
+              <span>✅</span>
+              <span>Entregado</span>
+            </div>
+            <div class="info-item">
+              <span>💳</span>
+              <span>Pago programado: 1 día</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Perfil Section -->
+      <div id="perfil" class="content-section">
+        <div class="header">
+          <h1 class="header-title">Mi Perfil</h1>
+        </div>
+
+        <div class="profile-section">
+          <h3 class="profile-title">Información del Negocio</h3>
+
+          <div class="card-items" style="margin-bottom: 1rem">
+            <div class="card-items-title">Datos básicos:</div>
+            <div class="card-items-list">
+              <strong>Nombre:</strong> Repuestos El Rápido<br />
+              <strong>RUT:</strong> 12.345.678-9<br />
+              <strong>Tipo:</strong> Tienda física<br />
+              <strong>Teléfono:</strong> +56 9 1234 5678<br />
+              <strong>Email:</strong> contacto@elrapido.cl
+            </div>
+          </div>
+
+          <div class="card-items" style="margin-bottom: 1rem">
+            <div class="card-items-title">Ubicación:</div>
+            <div class="card-items-list">
+              <strong>Dirección:</strong> Av. Providencia 123, Local 5<br />
+              <strong>Comuna:</strong> Providencia<br />
+              <strong>Región:</strong> Metropolitana
+            </div>
+          </div>
+
+          <div class="card-items" style="margin-bottom: 1.5rem">
+            <div class="card-items-title">Marcas que vendes:</div>
+            <div class="card-items-list">
+              Toyota • Nissan • Chevrolet • Ford • Hyundai
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-primary">
+              Editar información <span>✏️</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3 class="profile-title">Datos de Pago</h3>
+
+          <div class="card-items" style="margin-bottom: 1.5rem">
+            <div class="card-items-title">Cuenta bancaria:</div>
+            <div class="card-items-list">
+              <strong>Banco:</strong> Banco de Chile<br />
+              <strong>Tipo:</strong> Cuenta Corriente<br />
+              <strong>Número:</strong> ****5678<br />
+              <strong>Titular:</strong> Pedro González Martínez
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-primary">
+              Editar datos de pago <span>✏️</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      function showSection(sectionId) {
+        // Ocultar todas las secciones
+        document.querySelectorAll(".content-section").forEach((section) => {
+          section.classList.remove("active");
+        });
+
+        // Mostrar la sección seleccionada
+        document.getElementById(sectionId).classList.add("active");
+
+        // Actualizar nav activo
+        document.querySelectorAll(".nav-link").forEach((link) => {
+          link.classList.remove("active");
+        });
+        event.currentTarget.classList.add("active");
+      }
+
+      function filterOffers(type) {
+        // Actualizar tabs activos
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.remove("active");
+        });
+        event.target.classList.add("active");
+
+        // Aquí iría la lógica de filtrado real
+        console.log("Filtrando ofertas:", type);
+      }
+    </script>
+  </body>
+</html>

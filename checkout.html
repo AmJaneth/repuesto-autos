@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - RepuestosYa</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #2563eb;
+        --secondary: #f59e0b;
+        --dark: #0f172a;
+        --light: #f8fafc;
+        --accent: #10b981;
+        --gray: #64748b;
+        --error: #ef4444;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+        padding: 2rem 1rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: fadeInDown 0.6s ease;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .logo span {
+        color: var(--secondary);
+      }
+
+      .subtitle {
+        color: var(--gray);
+        font-size: 1.05rem;
+      }
+
+      /* Progress Steps */
+      .progress-steps {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 3rem;
+        animation: fadeInUp 0.6s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+
+      .step:not(:last-child) {
+        margin-right: 4rem;
+      }
+
+      .step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 20px;
+        left: 60px;
+        width: 4rem;
+        height: 3px;
+        background: #e2e8f0;
+      }
+
+      .step.completed::after {
+        background: var(--accent);
+      }
+
+      .step-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #e2e8f0;
+        color: var(--gray);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .step.completed .step-circle {
+        background: var(--accent);
+        color: white;
+      }
+
+      .step.active .step-circle {
+        background: var(--secondary);
+        color: white;
+        transform: scale(1.1);
+      }
+
+      .step-label {
+        font-size: 0.9rem;
+        color: var(--gray);
+        font-weight: 600;
+      }
+
+      .step.active .step-label {
+        color: var(--dark);
+      }
+
+      /* Main Grid */
+      .checkout-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 2rem;
+      }
+
+      /* Card */
+      .card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.6s ease;
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .card-description {
+        color: var(--gray);
+        margin-bottom: 2rem;
+      }
+
+      /* Section */
+      .section {
+        margin-bottom: 2rem;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      .section-icon {
+        font-size: 1.3rem;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      /* Info Box */
+      .info-box {
+        background: var(--light);
+        padding: 1.25rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+      }
+
+      .info-label {
+        color: var(--gray);
+        font-size: 0.95rem;
+      }
+
+      .info-value {
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      /* Payment Methods */
+      .payment-methods {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .payment-method {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1.25rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .payment-method:hover {
+        border-color: var(--secondary);
+        background: var(--light);
+      }
+
+      .payment-method.selected {
+        border-color: var(--secondary);
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+      }
+
+      .payment-radio {
+        width: 24px;
+        height: 24px;
+        border: 2px solid #e2e8f0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .payment-method.selected .payment-radio {
+        border-color: var(--secondary);
+      }
+
+      .payment-method.selected .payment-radio::after {
+        content: "";
+        width: 12px;
+        height: 12px;
+        background: var(--secondary);
+        border-radius: 50%;
+      }
+
+      .payment-info {
+        flex: 1;
+      }
+
+      .payment-name {
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.25rem;
+      }
+
+      .payment-desc {
+        font-size: 0.85rem;
+        color: var(--gray);
+      }
+
+      .payment-logo {
+        font-size: 2rem;
+      }
+
+      /* Summary Card */
+      .summary-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 2rem;
+        animation: fadeInUp 0.6s ease 0.1s both;
+      }
+
+      .summary-title {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 1.5rem;
+      }
+
+      .order-item {
+        background: var(--light);
+        padding: 1.25rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+      }
+
+      .item-header {
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+      }
+
+      .item-details {
+        font-size: 0.9rem;
+        color: var(--gray);
+        line-height: 1.6;
+      }
+
+      .summary-divider {
+        height: 1px;
+        background: #e2e8f0;
+        margin: 1.5rem 0;
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        font-size: 0.95rem;
+      }
+
+      .summary-label {
+        color: var(--gray);
+      }
+
+      .summary-value {
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .summary-total {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-top: 1rem;
+      }
+
+      .summary-total .summary-row {
+        padding: 0;
+      }
+
+      .summary-total .summary-label {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      .summary-total .summary-value {
+        font-size: 1.8rem;
+        color: var(--secondary);
+      }
+
+      /* Security Badge */
+      .security-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: #eff6ff;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-top: 1.5rem;
+      }
+
+      .security-icon {
+        font-size: 1.5rem;
+      }
+
+      .security-text {
+        font-size: 0.85rem;
+        color: var(--gray);
+        line-height: 1.5;
+      }
+
+      /* Terms Checkbox */
+      .terms-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+        padding: 1rem;
+        background: var(--light);
+        border-radius: 10px;
+      }
+
+      .terms-checkbox input[type="checkbox"] {
+        margin-top: 0.25rem;
+        cursor: pointer;
+      }
+
+      .terms-checkbox label {
+        font-size: 0.9rem;
+        color: var(--gray);
+        cursor: pointer;
+      }
+
+      .terms-checkbox a {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .terms-checkbox a:hover {
+        text-decoration: underline;
+      }
+
+      /* Buttons */
+      .btn {
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        width: 100%;
+        background: var(--secondary);
+        color: white;
+        font-size: 1.1rem;
+        padding: 1.25rem;
+      }
+
+      .btn-primary:hover {
+        background: #d97706;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-primary.loading::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border: 3px solid white;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .btn-back {
+        background: white;
+        color: var(--gray);
+        border: 2px solid #e2e8f0;
+        margin-bottom: 1rem;
+      }
+
+      .btn-back:hover {
+        border-color: var(--gray);
+        color: var(--dark);
+      }
+
+      /* Success Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.9);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal.show {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        max-width: 600px;
+        width: 90%;
+        text-align: center;
+        animation: slideUp 0.4s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .success-icon {
+        width: 100px;
+        height: 100px;
+        background: var(--accent);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        font-size: 4rem;
+        animation: scaleIn 0.5s ease;
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+
+      .modal-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 1rem;
+      }
+
+      .modal-message {
+        color: var(--gray);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .modal-info {
+        background: var(--light);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        text-align: left;
+      }
+
+      .modal-info-title {
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 1rem;
+      }
+
+      .modal-info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        font-size: 0.95rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 968px) {
+        .checkout-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .summary-card {
+          position: static;
+        }
+
+        .progress-steps {
+          overflow-x: auto;
+          justify-content: flex-start;
+          padding-bottom: 1rem;
+        }
+
+        .step:not(:last-child) {
+          margin-right: 2rem;
+        }
+
+        .step:not(:last-child)::after {
+          width: 2rem;
+          left: 50px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem 0.5rem;
+        }
+
+        .card,
+        .summary-card {
+          padding: 2rem 1.5rem;
+        }
+
+        .modal-content {
+          padding: 2rem 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">Repuestos<span>Ya</span></div>
+        <p class="subtitle">Completa tu compra de forma segura</p>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="progress-steps">
+        <div class="step completed">
+          <div class="step-circle">✓</div>
+          <span class="step-label">Solicitud</span>
+        </div>
+        <div class="step completed">
+          <div class="step-circle">✓</div>
+          <span class="step-label">Ofertas</span>
+        </div>
+        <div class="step active">
+          <div class="step-circle">3</div>
+          <span class="step-label">Pago</span>
+        </div>
+        <div class="step">
+          <div class="step-circle">4</div>
+          <span class="step-label">Confirmación</span>
+        </div>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="checkout-grid">
+        <!-- Left Column - Payment Details -->
+        <div>
+          <button class="btn btn-back" onclick="history.back()">
+            ← Volver a ofertas
+          </button>
+
+          <div class="card">
+            <h2 class="card-title">Información de Pago</h2>
+            <p class="card-description">
+              Selecciona tu método de pago preferido
+            </p>
+
+            <!-- Payment Methods -->
+            <div class="section">
+              <div class="section-header">
+                <span class="section-icon">💳</span>
+                <h3 class="section-title">Método de Pago</h3>
+              </div>
+
+              <div class="payment-methods">
+                <!-- Transbank -->
+                <div
+                  class="payment-method selected"
+                  onclick="selectPayment('transbank')"
+                >
+                  <div class="payment-radio"></div>
+                  <div class="payment-info">
+                    <div class="payment-name">Tarjeta de Crédito/Débito</div>
+                    <div class="payment-desc">
+                      Webpay Plus - Todas las tarjetas
+                    </div>
+                  </div>
+                  <div class="payment-logo">💳</div>
+                </div>
+
+                <!-- MercadoPago -->
+                <div
+                  class="payment-method"
+                  onclick="selectPayment('mercadopago')"
+                >
+                  <div class="payment-radio"></div>
+                  <div class="payment-info">
+                    <div class="payment-name">MercadoPago</div>
+                    <div class="payment-desc">Tarjetas y medios de pago</div>
+                  </div>
+                  <div class="payment-logo">💰</div>
+                </div>
+
+                <!-- Transferencia -->
+                <div
+                  class="payment-method"
+                  onclick="selectPayment('transferencia')"
+                >
+                  <div class="payment-radio"></div>
+                  <div class="payment-info">
+                    <div class="payment-name">Transferencia Bancaria</div>
+                    <div class="payment-desc">
+                      Pago manual - Requiere confirmación
+                    </div>
+                  </div>
+                  <div class="payment-logo">🏦</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Delivery Info -->
+            <div class="section">
+              <div class="section-header">
+                <span class="section-icon">📍</span>
+                <h3 class="section-title">Información de Entrega</h3>
+              </div>
+
+              <div class="info-box">
+                <div class="info-row">
+                  <span class="info-label">Nombre:</span>
+                  <span class="info-value">Juan Pérez</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Teléfono:</span>
+                  <span class="info-value">+56 9 1234 5678</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Email:</span>
+                  <span class="info-value">juan@email.com</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Ubicación:</span>
+                  <span class="info-value">Santiago, RM</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vendor Info -->
+            <div class="section">
+              <div class="section-header">
+                <span class="section-icon">🏪</span>
+                <h3 class="section-title">Vendedor</h3>
+              </div>
+
+              <div class="info-box">
+                <div class="info-row">
+                  <span class="info-label">Tienda:</span>
+                  <span class="info-value">Repuestos El Rápido</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Ubicación:</span>
+                  <span class="info-value">Av. Providencia 123</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Teléfono:</span>
+                  <span class="info-value">+56 9 8765 4321</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Tiempo entrega:</span>
+                  <span class="info-value">24 horas</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Terms -->
+            <div class="terms-checkbox">
+              <input type="checkbox" id="terms" required />
+              <label for="terms">
+                Acepto los
+                <a href="#" target="_blank">términos y condiciones</a> de
+                RepuestosYa y autorizo el cargo a mi tarjeta
+              </label>
+            </div>
+
+            <!-- Pay Button -->
+            <button class="btn btn-primary" onclick="processPayment()">
+              Pagar ahora
+              <span>🔒</span>
+            </button>
+
+            <!-- Security Badge -->
+            <div class="security-badge">
+              <span class="security-icon">🔒</span>
+              <div class="security-text">
+                <strong>Pago 100% seguro.</strong> Tus datos están protegidos
+                con encriptación SSL de 256 bits.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Order Summary -->
+        <div>
+          <div class="summary-card">
+            <h3 class="summary-title">Resumen del Pedido</h3>
+
+            <!-- Vehicle Info -->
+            <div class="order-item">
+              <div class="item-header">🚗 Toyota Corolla 2018</div>
+              <div class="item-details">Solicitud #12345</div>
+            </div>
+
+            <!-- Items -->
+            <div class="order-item">
+              <div class="item-header">📦 Repuestos (2)</div>
+              <div class="item-details">
+                • Pastillas de freno delanteras (Nuevo - Original)<br />
+                • Filtro de aceite (Nuevo - Original)<br />
+                <br />
+                <strong>Garantía:</strong> 6 meses<br />
+                <strong>Entrega:</strong> 24 horas
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <!-- Price Breakdown -->
+            <div class="summary-row">
+              <span class="summary-label">Subtotal repuestos:</span>
+              <span class="summary-value">$45.000</span>
+            </div>
+
+            <div class="summary-row">
+              <span class="summary-label">Comisión de servicio (3%):</span>
+              <span class="summary-value">$1.350</span>
+            </div>
+
+            <div class="summary-row">
+              <span class="summary-label">Envío:</span>
+              <span class="summary-value" style="color: var(--accent)"
+                >Gratis</span
+              >
+            </div>
+
+            <!-- Total -->
+            <div class="summary-total">
+              <div class="summary-row">
+                <span class="summary-label">TOTAL A PAGAR</span>
+                <span class="summary-value">$46.350</span>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <!-- Help -->
+            <div
+              style="
+                text-align: center;
+                color: var(--gray);
+                font-size: 0.85rem;
+                margin-top: 1rem;
+              "
+            >
+              ¿Necesitas ayuda?
+              <a
+                href="#"
+                style="
+                  color: var(--secondary);
+                  text-decoration: none;
+                  font-weight: 600;
+                "
+                >Contáctanos</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+      <div class="modal-content">
+        <div class="success-icon">✓</div>
+        <h2 class="modal-title">¡Pago exitoso!</h2>
+        <p class="modal-message">
+          Tu compra ha sido procesada correctamente.<br />
+          El vendedor ha sido notificado y pronto recibirás tus repuestos.
+        </p>
+
+        <div class="modal-info">
+          <div class="modal-info-title">Detalles de tu compra:</div>
+          <div class="modal-info-row">
+            <span>Número de orden:</span>
+            <strong>#ORD-12345</strong>
+          </div>
+          <div class="modal-info-row">
+            <span>Total pagado:</span>
+            <strong>$46.350</strong>
+          </div>
+          <div class="modal-info-row">
+            <span>Método de pago:</span>
+            <strong>Tarjeta ****1234</strong>
+          </div>
+        </div>
+
+        <p class="modal-message">
+          <strong>Próximos pasos:</strong><br />
+          1. Recibirás un email con los detalles de compra<br />
+          2. El vendedor te contactará por WhatsApp<br />
+          3. Coordinarás la entrega o retiro
+        </p>
+
+        <button
+          class="btn btn-primary"
+          onclick="window.location.href='dashboard_cliente.html#historial'"
+        >
+          Ver mis compras
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let selectedPaymentMethod = "transbank";
+
+      function selectPayment(method) {
+        selectedPaymentMethod = method;
+
+        // Actualizar UI
+        document.querySelectorAll(".payment-method").forEach((el) => {
+          el.classList.remove("selected");
+        });
+        event.currentTarget.classList.add("selected");
+      }
+
+      async function processPayment() {
+        // Validar términos
+        const terms = document.getElementById("terms");
+        if (!terms.checked) {
+          alert("Debes aceptar los términos y condiciones para continuar");
+          return;
+        }
+
+        const btn = event.target;
+        btn.classList.add("loading");
+        btn.disabled = true;
+
+        // Datos del pago
+        const paymentData = {
+          orderId: "12345",
+          amount: 46350,
+          currency: "CLP",
+          paymentMethod: selectedPaymentMethod,
+          customer: {
+            name: "Juan Pérez",
+            email: "juan@email.com",
+            phone: "+56912345678",
+          },
+          items: [
+            {
+              name: "Pastillas de freno delanteras",
+              quantity: 1,
+              price: 30000,
+            },
+            {
+              name: "Filtro de aceite",
+              quantity: 1,
+              price: 15000,
+            },
+          ],
+        };
+
+        console.log("Procesando pago:", paymentData);
+
+        // Simular llamada a la pasarela de pago
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        // TODO: Aquí iría la integración real con la pasarela
+        // Según el método seleccionado:
+        //
+        // TRANSBANK/WEBPAY:
+        // const response = await fetch('/api/pagos/webpay/create', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(paymentData)
+        // });
+        // const { token, url } = await response.json();
+        // window.location.href = url; // Redirigir a Webpay
+        //
+        // MERCADOPAGO:
+        // const response = await fetch('/api/pagos/mercadopago/create', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(paymentData)
+        // });
+        // const { init_point } = await response.json();
+        // window.location.href = init_point; // Redirigir a MercadoPago
+
+        // Mostrar modal de éxito (simulado)
+        document.getElementById("successModal").classList.add("show");
+      }
+    </script>
+  </body>
+</html>

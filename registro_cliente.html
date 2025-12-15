@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Cliente - RepuestosYa</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #2563eb;
+        --secondary: #f59e0b;
+        --dark: #0f172a;
+        --light: #f8fafc;
+        --accent: #10b981;
+        --gray: #64748b;
+        --error: #ef4444;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+        padding: 2rem 1rem;
+      }
+
+      .container {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: fadeInDown 0.6s ease;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .logo span {
+        color: var(--secondary);
+      }
+
+      .subtitle {
+        color: var(--gray);
+        font-size: 1.1rem;
+      }
+
+      /* Card */
+      .card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.6s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .form-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .form-description {
+        color: var(--gray);
+        margin-bottom: 2.5rem;
+      }
+
+      /* Section Headers */
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 2rem 0 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      .section-header:first-of-type {
+        margin-top: 0;
+      }
+
+      .section-icon {
+        font-size: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      /* Form Fields */
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group.full-width {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+      }
+
+      .required {
+        color: var(--error);
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        font-size: 1.2rem;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        padding-left: 3rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+      }
+
+      input.error,
+      select.error {
+        border-color: var(--error);
+      }
+
+      .error-message {
+        color: var(--error);
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .help-text {
+        font-size: 0.85rem;
+        color: var(--gray);
+        margin-top: 0.5rem;
+      }
+
+      /* Select styling */
+      select {
+        appearance: none;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2364748B"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 20px;
+        cursor: pointer;
+      }
+
+      /* Checkbox */
+      .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin: 2rem 0;
+        padding: 1.25rem;
+        background: var(--light);
+        border-radius: 10px;
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        width: auto;
+        padding: 0;
+        margin-top: 0.25rem;
+        cursor: pointer;
+      }
+
+      .checkbox-group label {
+        margin: 0;
+        font-weight: 400;
+        cursor: pointer;
+      }
+
+      .checkbox-group a {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .checkbox-group a:hover {
+        text-decoration: underline;
+      }
+
+      /* Submit Button */
+      .submit-button {
+        width: 100%;
+        padding: 1.125rem 2rem;
+        background: var(--secondary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .submit-button:hover {
+        background: #d97706;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+      }
+
+      .submit-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .submit-button.loading {
+        pointer-events: none;
+      }
+
+      .submit-button.loading::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border: 3px solid white;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Success Screen */
+      .success-screen {
+        display: none;
+        text-align: center;
+        padding: 3rem 2rem;
+      }
+
+      .success-screen.show {
+        display: block;
+        animation: fadeInUp 0.6s ease;
+      }
+
+      .success-icon {
+        width: 100px;
+        height: 100px;
+        background: var(--accent);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        font-size: 4rem;
+        animation: scaleIn 0.5s ease;
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+
+      .success-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 1rem;
+      }
+
+      .success-message {
+        color: var(--gray);
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+      }
+
+      .back-link {
+        display: inline-block;
+        color: var(--gray);
+        text-decoration: none;
+        margin-top: 2rem;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .back-link:hover {
+        color: var(--dark);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem 0.5rem;
+        }
+
+        .card {
+          padding: 2rem 1.5rem;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .form-title {
+          font-size: 1.5rem;
+        }
+
+        .section-header {
+          margin: 1.5rem 0 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">Repuestos<span>Ya</span></div>
+        <p class="subtitle">Crea tu cuenta y comienza a buscar repuestos</p>
+      </div>
+
+      <!-- Card -->
+      <div class="card">
+        <h1 class="form-title">Registro de Cliente</h1>
+        <p class="form-description">
+          Completa el formulario para crear tu cuenta
+        </p>
+
+        <form id="registroForm">
+          <!-- Datos Personales -->
+          <div class="section-header">
+            <span class="section-icon">👤</span>
+            <h2 class="section-title">Datos Personales</h2>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre"
+                >Nombre completo <span class="required">*</span></label
+              >
+              <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <input
+                  type="text"
+                  id="nombre"
+                  name="nombre"
+                  placeholder="Juan Pérez"
+                  required
+                />
+              </div>
+              <div class="error-message" id="error-nombre">
+                Por favor ingresa tu nombre completo
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="telefono"
+                >Teléfono (WhatsApp) <span class="required">*</span></label
+              >
+              <div class="input-wrapper">
+                <span class="input-icon">📱</span>
+                <input
+                  type="tel"
+                  id="telefono"
+                  name="telefono"
+                  placeholder="+56 9 1234 5678"
+                  required
+                />
+              </div>
+              <p class="help-text">Recibirás notificaciones por WhatsApp</p>
+              <div class="error-message" id="error-telefono">
+                Ingresa un número válido
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email"
+              >Correo electrónico <span class="required">*</span></label
+            >
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="tu@email.com"
+                required
+              />
+            </div>
+            <div class="error-message" id="error-email">
+              Ingresa un email válido
+            </div>
+          </div>
+
+          <!-- Datos del Vehículo -->
+          <div class="section-header">
+            <span class="section-icon">🚗</span>
+            <h2 class="section-title">Tu Vehículo</h2>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="marca">Marca <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">🔧</span>
+                <select id="marca" name="marca" required>
+                  <option value="">Selecciona la marca</option>
+                  <option value="chevrolet">Chevrolet</option>
+                  <option value="ford">Ford</option>
+                  <option value="hyundai">Hyundai</option>
+                  <option value="kia">Kia</option>
+                  <option value="mazda">Mazda</option>
+                  <option value="nissan">Nissan</option>
+                  <option value="suzuki">Suzuki</option>
+                  <option value="toyota">Toyota</option>
+                  <option value="volkswagen">Volkswagen</option>
+                </select>
+              </div>
+              <div class="error-message" id="error-marca">
+                Selecciona una marca
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="modelo">Modelo <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">🚙</span>
+                <select id="modelo" name="modelo" required disabled>
+                  <option value="">Primero selecciona una marca</option>
+                </select>
+              </div>
+              <div class="error-message" id="error-modelo">
+                Selecciona un modelo
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ano">Año <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">📅</span>
+                <select id="ano" name="ano" required>
+                  <option value="">Selecciona el año</option>
+                </select>
+              </div>
+              <div class="error-message" id="error-ano">Selecciona el año</div>
+            </div>
+
+            <div class="form-group">
+              <label for="motor">Versión/Motor</label>
+              <div class="input-wrapper">
+                <span class="input-icon">⚙️</span>
+                <input
+                  type="text"
+                  id="motor"
+                  name="motor"
+                  placeholder="Ej: 1.5L, Diesel, etc."
+                />
+              </div>
+              <p class="help-text">
+                Opcional pero ayuda a encontrar repuestos exactos
+              </p>
+            </div>
+          </div>
+
+          <!-- Ubicación -->
+          <div class="section-header">
+            <span class="section-icon">📍</span>
+            <h2 class="section-title">Ubicación</h2>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="region">Región <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">🗺️</span>
+                <select id="region" name="region" required>
+                  <option value="">Selecciona tu región</option>
+                  <option value="metropolitana">Región Metropolitana</option>
+                  <option value="valparaiso">Valparaíso</option>
+                  <option value="biobio">Biobío</option>
+                  <option value="araucania">La Araucanía</option>
+                  <option value="loslagos">Los Lagos</option>
+                  <option value="coquimbo">Coquimbo</option>
+                  <option value="maule">Maule</option>
+                  <option value="losrios">Los Ríos</option>
+                </select>
+              </div>
+              <div class="error-message" id="error-region">
+                Selecciona tu región
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="comuna">Comuna <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">🏘️</span>
+                <select id="comuna" name="comuna" required disabled>
+                  <option value="">Primero selecciona una región</option>
+                </select>
+              </div>
+              <div class="error-message" id="error-comuna">
+                Selecciona tu comuna
+              </div>
+            </div>
+          </div>
+
+          <!-- Términos y Condiciones -->
+          <div class="checkbox-group">
+            <input type="checkbox" id="terminos" name="terminos" required />
+            <label for="terminos">
+              Acepto los
+              <a href="#" target="_blank">términos y condiciones</a> y la
+              <a href="#" target="_blank">política de privacidad</a> de
+              RepuestosYa
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="submit-button">
+            Crear mi cuenta
+            <span>🚀</span>
+          </button>
+
+          <a href="index.html" class="back-link">← Volver al inicio</a>
+        </form>
+
+        <!-- Success Screen -->
+        <div class="success-screen" id="successScreen">
+          <div class="success-icon">✓</div>
+          <h2 class="success-title">¡Cuenta creada exitosamente!</h2>
+          <p class="success-message">
+            Bienvenido a RepuestosYa.<br />
+            Ya puedes comenzar a buscar los repuestos que necesitas.<br />
+            Te enviamos un mensaje de confirmación a tu WhatsApp.
+          </p>
+          <button
+            type="button"
+            class="submit-button"
+            onclick="window.location.href='busqueda.html'"
+          >
+            Comenzar a buscar repuestos
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Datos de modelos por marca
+      const modelosPorMarca = {
+        chevrolet: [
+          "Spark",
+          "Sail",
+          "Cruze",
+          "Tracker",
+          "Captiva",
+          "Silverado",
+          "Onix",
+        ],
+        ford: [
+          "Fiesta",
+          "Focus",
+          "Fusion",
+          "Escape",
+          "Explorer",
+          "Ranger",
+          "EcoSport",
+        ],
+        hyundai: [
+          "Accent",
+          "Elantra",
+          "Tucson",
+          "Santa Fe",
+          "Kona",
+          "Creta",
+          "i10",
+        ],
+        kia: [
+          "Rio",
+          "Cerato",
+          "Sportage",
+          "Sorento",
+          "Seltos",
+          "Picanto",
+          "Stonic",
+        ],
+        mazda: ["Mazda2", "Mazda3", "CX-3", "CX-5", "CX-30", "BT-50", "CX-9"],
+        nissan: [
+          "Versa",
+          "Sentra",
+          "Kicks",
+          "X-Trail",
+          "Qashqai",
+          "Frontier",
+          "March",
+        ],
+        suzuki: ["Swift", "Baleno", "Vitara", "Jimny", "S-Cross", "Ciaz"],
+        toyota: [
+          "Yaris",
+          "Corolla",
+          "RAV4",
+          "Hilux",
+          "Land Cruiser",
+          "Camry",
+          "C-HR",
+        ],
+        volkswagen: [
+          "Gol",
+          "Polo",
+          "Jetta",
+          "Tiguan",
+          "Amarok",
+          "T-Cross",
+          "Virtus",
+        ],
+      };
+
+      // Datos de comunas por región
+      const comunasPorRegion = {
+        metropolitana: [
+          "Santiago",
+          "Providencia",
+          "Las Condes",
+          "Ñuñoa",
+          "La Florida",
+          "Maipú",
+          "Puente Alto",
+          "San Bernardo",
+          "La Reina",
+          "Vitacura",
+        ],
+        valparaiso: [
+          "Valparaíso",
+          "Viña del Mar",
+          "Quilpué",
+          "Villa Alemana",
+          "Concón",
+          "Casablanca",
+          "Quillota",
+        ],
+        biobio: [
+          "Concepción",
+          "Talcahuano",
+          "Los Ángeles",
+          "Chillán",
+          "Coronel",
+          "San Pedro de la Paz",
+          "Hualpén",
+        ],
+        araucania: [
+          "Temuco",
+          "Padre Las Casas",
+          "Villarrica",
+          "Pucón",
+          "Angol",
+          "Victoria",
+        ],
+        loslagos: [
+          "Puerto Montt",
+          "Osorno",
+          "Puerto Varas",
+          "Castro",
+          "Ancud",
+          "Frutillar",
+        ],
+        coquimbo: ["La Serena", "Coquimbo", "Ovalle", "Illapel", "Vicuña"],
+        maule: ["Talca", "Curicó", "Linares", "Constitución", "Cauquenes"],
+        losrios: ["Valdivia", "La Unión", "Río Bueno", "Panguipulli"],
+      };
+
+      // Generar años (últimos 30 años)
+      const anoSelect = document.getElementById("ano");
+      const currentYear = new Date().getFullYear();
+      for (let year = currentYear; year >= currentYear - 30; year--) {
+        const option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+        anoSelect.appendChild(option);
+      }
+
+      // Actualizar modelos según marca seleccionada
+      document.getElementById("marca").addEventListener("change", function () {
+        const modeloSelect = document.getElementById("modelo");
+        const marca = this.value;
+
+        modeloSelect.innerHTML =
+          '<option value="">Selecciona el modelo</option>';
+
+        if (marca && modelosPorMarca[marca]) {
+          modeloSelect.disabled = false;
+          modelosPorMarca[marca].forEach((modelo) => {
+            const option = document.createElement("option");
+            option.value = modelo.toLowerCase().replace(/\s/g, "-");
+            option.textContent = modelo;
+            modeloSelect.appendChild(option);
+          });
+        } else {
+          modeloSelect.disabled = true;
+        }
+      });
+
+      // Actualizar comunas según región seleccionada
+      document.getElementById("region").addEventListener("change", function () {
+        const comunaSelect = document.getElementById("comuna");
+        const region = this.value;
+
+        comunaSelect.innerHTML =
+          '<option value="">Selecciona tu comuna</option>';
+
+        if (region && comunasPorRegion[region]) {
+          comunaSelect.disabled = false;
+          comunasPorRegion[region].forEach((comuna) => {
+            const option = document.createElement("option");
+            option.value = comuna.toLowerCase().replace(/\s/g, "-");
+            option.textContent = comuna;
+            comunaSelect.appendChild(option);
+          });
+        } else {
+          comunaSelect.disabled = true;
+        }
+      });
+
+      // Validación en tiempo real
+      document.querySelectorAll("input, select").forEach((input) => {
+        input.addEventListener("input", function () {
+          this.classList.remove("error");
+          const errorMessage = document.getElementById(`error-${this.id}`);
+          if (errorMessage) {
+            errorMessage.classList.remove("show");
+          }
+        });
+      });
+
+      // Submit del formulario
+      document
+        .getElementById("registroForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          let isValid = true;
+
+          // Validar todos los campos requeridos
+          const requiredFields = this.querySelectorAll("[required]");
+          requiredFields.forEach((field) => {
+            if (
+              !field.value.trim() ||
+              (field.type === "checkbox" && !field.checked)
+            ) {
+              field.classList.add("error");
+              const errorMessage = document.getElementById(`error-${field.id}`);
+              if (errorMessage) {
+                errorMessage.classList.add("show");
+              }
+              isValid = false;
+            }
+          });
+
+          // Validación específica para email
+          const email = document.getElementById("email");
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (email.value && !emailRegex.test(email.value)) {
+            email.classList.add("error");
+            document.getElementById("error-email").classList.add("show");
+            isValid = false;
+          }
+
+          // Validación específica para teléfono
+          const telefono = document.getElementById("telefono");
+          const phoneRegex = /^\+?56\s?9\s?\d{4}\s?\d{4}$/;
+          if (
+            telefono.value &&
+            !phoneRegex.test(telefono.value.replace(/\s/g, ""))
+          ) {
+            telefono.classList.add("error");
+            const errorTel = document.getElementById("error-telefono");
+            errorTel.textContent = "Formato: +56 9 1234 5678";
+            errorTel.classList.add("show");
+            isValid = false;
+          }
+
+          // Validar checkbox de términos
+          const terminos = document.getElementById("terminos");
+          if (!terminos.checked) {
+            alert("Debes aceptar los términos y condiciones para continuar");
+            isValid = false;
+          }
+
+          if (!isValid) {
+            // Scroll al primer error
+            const firstError = document.querySelector(".error");
+            if (firstError) {
+              firstError.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+            }
+            return;
+          }
+
+          // Mostrar estado de carga
+          const submitBtn = this.querySelector(".submit-button");
+          submitBtn.classList.add("loading");
+          submitBtn.disabled = true;
+
+          // Recolectar datos del formulario
+          const formData = {
+            nombre: document.getElementById("nombre").value,
+            telefono: document.getElementById("telefono").value,
+            email: document.getElementById("email").value,
+            marca: document.getElementById("marca").value,
+            modelo: document.getElementById("modelo").value,
+            ano: document.getElementById("ano").value,
+            motor: document.getElementById("motor").value,
+            region: document.getElementById("region").value,
+            comuna: document.getElementById("comuna").value,
+          };
+
+          console.log("Datos del formulario:", formData);
+
+          // Simular llamada a la API (reemplazar con fetch real)
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+
+          // TODO: Aquí iría la llamada real a tu API .NET
+          // const response = await fetch('/api/clientes/registro', {
+          //     method: 'POST',
+          //     headers: { 'Content-Type': 'application/json' },
+          //     body: JSON.stringify(formData)
+          // });
+
+          // Mostrar pantalla de éxito
+          this.style.display = "none";
+          document.getElementById("successScreen").classList.add("show");
+        });
+    </script>
+  </body>
+</html>

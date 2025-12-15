@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesión - RepuestosYa</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #2563eb;
+        --secondary: #f59e0b;
+        --dark: #0f172a;
+        --light: #f8fafc;
+        --accent: #10b981;
+        --gray: #64748b;
+        --error: #ef4444;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+      }
+
+      .container {
+        max-width: 450px;
+        width: 100%;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: fadeInDown 0.6s ease;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 0.5rem;
+      }
+
+      .logo span {
+        color: var(--secondary);
+      }
+
+      .subtitle {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.05rem;
+      }
+
+      /* Card */
+      .card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 0.6s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .card-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        text-align: center;
+      }
+
+      .card-description {
+        color: var(--gray);
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      /* User Type Selector */
+      .user-type-selector {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .user-type {
+        padding: 1.25rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+
+      .user-type:hover {
+        border-color: var(--secondary);
+        background: var(--light);
+      }
+
+      .user-type.active {
+        border-color: var(--secondary);
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+      }
+
+      .user-type-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .user-type-name {
+        font-weight: 700;
+        color: var(--dark);
+        font-size: 1rem;
+      }
+
+      /* Form */
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        font-size: 1.2rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        padding-left: 3rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+      }
+
+      input.error {
+        border-color: var(--error);
+      }
+
+      .error-message {
+        color: var(--error);
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      /* Remember & Forgot */
+      .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .remember-me {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .remember-me input {
+        width: auto;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+      }
+
+      .remember-me label {
+        margin: 0;
+        font-weight: 400;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+
+      .forgot-password {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+
+      .forgot-password:hover {
+        text-decoration: underline;
+      }
+
+      /* Submit Button */
+      .submit-button {
+        width: 100%;
+        padding: 1.125rem 2rem;
+        background: var(--secondary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+
+      .submit-button:hover {
+        background: #d97706;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+      }
+
+      .submit-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .submit-button.loading::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border: 3px solid white;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Divider */
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 2rem 0;
+      }
+
+      .divider-line {
+        flex: 1;
+        height: 1px;
+        background: #e2e8f0;
+      }
+
+      .divider-text {
+        padding: 0 1rem;
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+
+      /* Register Link */
+      .register-link {
+        text-align: center;
+        color: var(--gray);
+        font-size: 0.95rem;
+      }
+
+      .register-link a {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .register-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* Back Link */
+      .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 2rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .back-link:hover {
+        color: white;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem 0.5rem;
+        }
+
+        .card {
+          padding: 2rem 1.5rem;
+        }
+
+        .card-title {
+          font-size: 1.5rem;
+        }
+
+        .user-type-selector {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">Repuestos<span>Ya</span></div>
+        <p class="subtitle">Inicia sesión en tu cuenta</p>
+      </div>
+
+      <!-- Card -->
+      <div class="card">
+        <h1 class="card-title">Bienvenido de vuelta</h1>
+        <p class="card-description">
+          Selecciona tu tipo de usuario e inicia sesión
+        </p>
+
+        <!-- User Type Selector -->
+        <div class="user-type-selector">
+          <div class="user-type active" onclick="selectUserType('cliente')">
+            <div class="user-type-icon">👤</div>
+            <div class="user-type-name">Cliente</div>
+          </div>
+          <div class="user-type" onclick="selectUserType('vendedor')">
+            <div class="user-type-icon">🏪</div>
+            <div class="user-type-name">Vendedor</div>
+          </div>
+        </div>
+
+        <form id="loginForm">
+          <input type="hidden" id="userType" value="cliente" />
+
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input
+                type="email"
+                id="email"
+                placeholder="tu@email.com"
+                required
+              />
+            </div>
+            <div class="error-message" id="error-email">
+              Ingresa un email válido
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input
+                type="password"
+                id="password"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+            <div class="error-message" id="error-password">
+              Ingresa tu contraseña
+            </div>
+          </div>
+
+          <div class="form-options">
+            <div class="remember-me">
+              <input type="checkbox" id="remember" />
+              <label for="remember">Recordarme</label>
+            </div>
+            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button type="submit" class="submit-button">
+            Iniciar Sesión
+            <span>→</span>
+          </button>
+        </form>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <div class="divider-text">o</div>
+          <div class="divider-line"></div>
+        </div>
+
+        <div class="register-link" id="registerLink">
+          ¿No tienes cuenta?
+          <a href="registro_cliente.html">Regístrate como Cliente</a>
+        </div>
+      </div>
+
+      <a href="index.html" class="back-link">← Volver al inicio</a>
+    </div>
+
+    <script>
+      let currentUserType = "cliente";
+
+      function selectUserType(type) {
+        currentUserType = type;
+        document.getElementById("userType").value = type;
+
+        // Actualizar UI
+        document.querySelectorAll(".user-type").forEach((el) => {
+          el.classList.remove("active");
+        });
+        event.currentTarget.classList.add("active");
+
+        // Actualizar link de registro
+        const registerLink = document.getElementById("registerLink");
+        if (type === "cliente") {
+          registerLink.innerHTML =
+            '¿No tienes cuenta? <a href="registro_cliente.html">Regístrate como Cliente</a>';
+        } else {
+          registerLink.innerHTML =
+            '¿No tienes cuenta? <a href="registro_vendedor.html">Regístrate como Vendedor</a>';
+        }
+      }
+
+      // Validación en tiempo real
+      document.querySelectorAll("input").forEach((input) => {
+        input.addEventListener("input", function () {
+          this.classList.remove("error");
+          const errorMessage = document.getElementById(`error-${this.id}`);
+          if (errorMessage) {
+            errorMessage.classList.remove("show");
+          }
+        });
+      });
+
+      // Submit del formulario
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          let isValid = true;
+
+          // Validar email
+          const email = document.getElementById("email");
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!email.value || !emailRegex.test(email.value)) {
+            email.classList.add("error");
+            document.getElementById("error-email").classList.add("show");
+            isValid = false;
+          }
+
+          // Validar password
+          const password = document.getElementById("password");
+          if (!password.value) {
+            password.classList.add("error");
+            document.getElementById("error-password").classList.add("show");
+            isValid = false;
+          }
+
+          if (!isValid) {
+            return;
+          }
+
+          // Mostrar estado de carga
+          const submitBtn = this.querySelector(".submit-button");
+          submitBtn.classList.add("loading");
+          submitBtn.disabled = true;
+
+          // Datos del login
+          const loginData = {
+            email: email.value,
+            password: password.value,
+            userType: currentUserType,
+            remember: document.getElementById("remember").checked,
+          };
+
+          console.log("Iniciando sesión:", loginData);
+
+          // Simular llamada a la API
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+
+          // TODO: Aquí iría la llamada real a tu API .NET
+          // const response = await fetch('/api/auth/login', {
+          //     method: 'POST',
+          //     headers: { 'Content-Type': 'application/json' },
+          //     body: JSON.stringify(loginData)
+          // });
+          //
+          // const data = await response.json();
+          // if (data.success) {
+          //     localStorage.setItem('token', data.token);
+          //     localStorage.setItem('userType', data.userType);
+          //     // Redirigir según tipo de usuario
+          // }
+
+          // Simular redirección según tipo de usuario
+          if (currentUserType === "cliente") {
+            window.location.href = "dashboard_cliente.html";
+          } else {
+            window.location.href = "dashboard_vendedor.html";
+          }
+        });
+    </script>
+  </body>
+</html>

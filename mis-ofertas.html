@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tus Ofertas - RepuestosYa</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #2563eb;
+        --secondary: #f59e0b;
+        --dark: #0f172a;
+        --light: #f8fafc;
+        --accent: #10b981;
+        --gray: #64748b;
+        --error: #ef4444;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+        padding: 2rem 1rem;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: fadeInDown 0.6s ease;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .logo span {
+        color: var(--secondary);
+      }
+
+      .subtitle {
+        color: var(--gray);
+        font-size: 1.05rem;
+      }
+
+      /* Success Banner */
+      .success-banner {
+        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        border-left: 4px solid var(--accent);
+        padding: 1.5rem 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        animation: fadeInUp 0.6s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .banner-icon {
+        font-size: 2.5rem;
+      }
+
+      .banner-content {
+        flex: 1;
+      }
+
+      .banner-title {
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.25rem;
+        font-size: 1.2rem;
+      }
+
+      .banner-text {
+        color: #065f46;
+        font-size: 0.95rem;
+      }
+
+      .banner-count {
+        background: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 20px;
+        font-weight: 700;
+        color: var(--dark);
+        font-size: 1.1rem;
+      }
+
+      /* Card */
+      .card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.6s ease 0.1s both;
+        margin-bottom: 2rem;
+      }
+
+      .card-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .card-description {
+        color: var(--gray);
+        margin-bottom: 2rem;
+      }
+
+      /* Request Summary */
+      .request-summary {
+        background: var(--light);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+      }
+
+      .summary-title {
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 1rem;
+      }
+
+      .summary-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .summary-item:last-child {
+        border-bottom: none;
+      }
+
+      .summary-label {
+        color: var(--gray);
+      }
+
+      .summary-value {
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      /* Offers Grid */
+      .offers-section {
+        margin-bottom: 2rem;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      .sort-select {
+        padding: 0.5rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+
+      .offers-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      /* Offer Card */
+      .offer-card {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        animation: slideIn 0.4s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .offer-card:hover {
+        border-color: var(--secondary);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transform: translateY(-3px);
+      }
+
+      .offer-card.best-offer {
+        border-color: var(--accent);
+        background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      }
+
+      .best-badge {
+        position: absolute;
+        top: -12px;
+        right: 20px;
+        background: var(--accent);
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      }
+
+      .offer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1.5rem;
+      }
+
+      .vendor-info {
+        flex: 1;
+      }
+
+      .vendor-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .vendor-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--secondary);
+        font-size: 0.9rem;
+      }
+
+      .price-tag {
+        text-align: right;
+      }
+
+      .price-label {
+        font-size: 0.85rem;
+        color: var(--gray);
+        margin-bottom: 0.25rem;
+      }
+
+      .price-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+      }
+
+      .offer-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--gray);
+        font-size: 0.95rem;
+      }
+
+      .detail-icon {
+        font-size: 1.2rem;
+      }
+
+      .detail-value {
+        color: var(--dark);
+        font-weight: 600;
+      }
+
+      .offer-description {
+        background: var(--light);
+        padding: 1rem;
+        border-radius: 10px;
+        color: var(--gray);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+      }
+
+      .offer-items {
+        background: #fef3c7;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+      }
+
+      .offer-items-title {
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .offer-items-list {
+        color: #78716c;
+        font-size: 0.9rem;
+      }
+
+      .offer-actions {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 0.875rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: var(--secondary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #d97706;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      }
+
+      .btn-secondary {
+        background: white;
+        color: var(--gray);
+        border: 2px solid #e2e8f0;
+      }
+
+      .btn-secondary:hover {
+        border-color: var(--gray);
+        color: var(--dark);
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+      }
+
+      .empty-icon {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+      }
+
+      .empty-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .empty-text {
+        color: var(--gray);
+        margin-bottom: 2rem;
+      }
+
+      /* Comparison Table */
+      .comparison-toggle {
+        text-align: center;
+        margin: 2rem 0;
+      }
+
+      .toggle-btn {
+        background: white;
+        border: 2px solid #e2e8f0;
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--gray);
+        transition: all 0.3s ease;
+      }
+
+      .toggle-btn:hover {
+        border-color: var(--secondary);
+        color: var(--secondary);
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.8);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+
+      .modal.show {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        animation: slideUp 0.4s ease;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .modal-icon {
+        width: 100px;
+        height: 100px;
+        background: var(--secondary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 4rem;
+        animation: scaleIn 0.5s ease;
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+
+      .modal-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 1rem;
+      }
+
+      .modal-message {
+        color: var(--gray);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .modal-highlight {
+        background: var(--light);
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin: 1.5rem 0;
+        text-align: left;
+      }
+
+      .highlight-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .highlight-item:last-child {
+        border-bottom: none;
+      }
+
+      .highlight-label {
+        color: var(--gray);
+      }
+
+      .highlight-value {
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 1rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem 0.5rem;
+        }
+
+        .card {
+          padding: 2rem 1.5rem;
+        }
+
+        .success-banner {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .offer-header {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .price-tag {
+          text-align: left;
+        }
+
+        .offer-actions {
+          flex-direction: column;
+        }
+
+        .modal-content {
+          padding: 2rem 1.5rem;
+        }
+
+        .modal-actions {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">Repuestos<span>Ya</span></div>
+        <p class="subtitle">Tus ofertas recibidas</p>
+      </div>
+
+      <!-- Success Banner -->
+      <div class="success-banner">
+        <div class="banner-icon">🎉</div>
+        <div class="banner-content">
+          <div class="banner-title">¡Tienes ofertas disponibles!</div>
+          <div class="banner-text">
+            Los vendedores han respondido a tu solicitud. Compara y elige la
+            mejor opción.
+          </div>
+        </div>
+        <div class="banner-count">5 ofertas</div>
+      </div>
+
+      <!-- Main Card -->
+      <div class="card">
+        <h1 class="card-title">Ofertas para tu solicitud</h1>
+        <p class="card-description">
+          Revisa todas las ofertas y elige la que mejor se ajuste a tus
+          necesidades.
+        </p>
+
+        <!-- Request Summary -->
+        <div class="request-summary">
+          <div class="summary-title">📋 Tu solicitud</div>
+          <div class="summary-item">
+            <span class="summary-label">🚗 Vehículo:</span>
+            <span class="summary-value">Toyota Corolla 2018</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">📦 Repuestos:</span>
+            <span class="summary-value"
+              >Pastillas de freno + Filtro de aceite</span
+            >
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">📍 Ubicación:</span>
+            <span class="summary-value">Santiago, RM</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">⏰ Publicado:</span>
+            <span class="summary-value">Hace 2 horas</span>
+          </div>
+        </div>
+
+        <!-- Offers Section -->
+        <div class="offers-section">
+          <div class="section-header">
+            <h2 class="section-title">Ofertas recibidas (5)</h2>
+            <select class="sort-select" onchange="sortOffers(this.value)">
+              <option value="mejor">Mejor precio</option>
+              <option value="reciente">Más reciente</option>
+              <option value="tiempo">Entrega más rápida</option>
+            </select>
+          </div>
+
+          <div class="offers-grid" id="offersGrid">
+            <!-- Offer 1 - Best Offer -->
+            <div
+              class="offer-card best-offer"
+              data-price="45000"
+              data-time="24h"
+            >
+              <div class="best-badge">⭐ Mejor precio</div>
+
+              <div class="offer-header">
+                <div class="vendor-info">
+                  <div class="vendor-name">Repuestos El Rápido</div>
+                  <div class="vendor-rating">⭐⭐⭐⭐⭐ <span>(4.8)</span></div>
+                </div>
+                <div class="price-tag">
+                  <div class="price-label">Precio total</div>
+                  <div class="price-value">$45.000</div>
+                </div>
+              </div>
+
+              <div class="offer-items">
+                <div class="offer-items-title">📦 Incluye:</div>
+                <div class="offer-items-list">
+                  ✓ Pastillas de freno delanteras<br />
+                  ✓ Filtro de aceite
+                </div>
+              </div>
+
+              <div class="offer-details">
+                <div class="detail-item">
+                  <span class="detail-icon">📦</span>
+                  <span
+                    ><span class="detail-value">Nuevo</span> - Original</span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">🚚</span>
+                  <span
+                    >Entrega: <span class="detail-value">24 horas</span></span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">✅</span>
+                  <span
+                    >Garantía: <span class="detail-value">6 meses</span></span
+                  >
+                </div>
+              </div>
+
+              <div class="offer-description">
+                Repuestos originales Toyota. Pastillas de freno marca Bosch,
+                filtro original Toyota. Instalación disponible. Ubicados en
+                Providencia.
+              </div>
+
+              <div class="offer-actions">
+                <button
+                  class="btn btn-secondary"
+                  onclick="contactVendor('Repuestos El Rápido')"
+                >
+                  💬 Contactar
+                </button>
+                <button
+                  class="btn btn-primary"
+                  onclick="selectOffer(1, 45000, 'Repuestos El Rápido')"
+                >
+                  Elegir esta oferta
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Offer 2 -->
+            <div class="offer-card" data-price="52000" data-time="inmediato">
+              <div class="offer-header">
+                <div class="vendor-info">
+                  <div class="vendor-name">AutoPartes Central</div>
+                  <div class="vendor-rating">⭐⭐⭐⭐ <span>(4.5)</span></div>
+                </div>
+                <div class="price-tag">
+                  <div class="price-label">Precio total</div>
+                  <div class="price-value">$52.000</div>
+                </div>
+              </div>
+
+              <div class="offer-items">
+                <div class="offer-items-title">📦 Incluye:</div>
+                <div class="offer-items-list">
+                  ✓ Pastillas de freno delanteras<br />
+                  ✓ Filtro de aceite
+                </div>
+              </div>
+
+              <div class="offer-details">
+                <div class="detail-item">
+                  <span class="detail-icon">📦</span>
+                  <span
+                    ><span class="detail-value">Nuevo</span> - Original</span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">🚚</span>
+                  <span
+                    >Entrega: <span class="detail-value">Inmediata</span></span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">✅</span>
+                  <span>Garantía: <span class="detail-value">1 año</span></span>
+                </div>
+              </div>
+
+              <div class="offer-description">
+                Repuestos premium con garantía extendida. Retiro en tienda o
+                envío a domicilio. Stock disponible ahora.
+              </div>
+
+              <div class="offer-actions">
+                <button
+                  class="btn btn-secondary"
+                  onclick="contactVendor('AutoPartes Central')"
+                >
+                  💬 Contactar
+                </button>
+                <button
+                  class="btn btn-primary"
+                  onclick="selectOffer(2, 52000, 'AutoPartes Central')"
+                >
+                  Elegir esta oferta
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Offer 3 -->
+            <div class="offer-card" data-price="38000" data-time="48h">
+              <div class="offer-header">
+                <div class="vendor-info">
+                  <div class="vendor-name">Repuestos González</div>
+                  <div class="vendor-rating">⭐⭐⭐⭐ <span>(4.2)</span></div>
+                </div>
+                <div class="price-tag">
+                  <div class="price-label">Precio total</div>
+                  <div class="price-value">$38.000</div>
+                </div>
+              </div>
+
+              <div class="offer-items">
+                <div class="offer-items-title">📦 Incluye:</div>
+                <div class="offer-items-list">
+                  ✓ Pastillas de freno delanteras (compatible)
+                </div>
+              </div>
+
+              <div class="offer-details">
+                <div class="detail-item">
+                  <span class="detail-icon">📦</span>
+                  <span
+                    ><span class="detail-value">Nuevo</span> - Compatible</span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">🚚</span>
+                  <span
+                    >Entrega: <span class="detail-value">48 horas</span></span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">✅</span>
+                  <span
+                    >Garantía: <span class="detail-value">3 meses</span></span
+                  >
+                </div>
+              </div>
+
+              <div class="offer-description">
+                Solo tengo disponibles las pastillas de freno. Marca Brembo
+                compatible, excelente calidad. No tengo el filtro en stock
+                actualmente.
+              </div>
+
+              <div class="offer-actions">
+                <button
+                  class="btn btn-secondary"
+                  onclick="contactVendor('Repuestos González')"
+                >
+                  💬 Contactar
+                </button>
+                <button
+                  class="btn btn-primary"
+                  onclick="selectOffer(3, 38000, 'Repuestos González')"
+                >
+                  Elegir esta oferta
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Offer 4 -->
+            <div class="offer-card" data-price="47000" data-time="24h">
+              <div class="offer-header">
+                <div class="vendor-info">
+                  <div class="vendor-name">Import Repuestos</div>
+                  <div class="vendor-rating">⭐⭐⭐⭐⭐ <span>(4.9)</span></div>
+                </div>
+                <div class="price-tag">
+                  <div class="price-label">Precio total</div>
+                  <div class="price-value">$47.000</div>
+                </div>
+              </div>
+
+              <div class="offer-items">
+                <div class="offer-items-title">📦 Incluye:</div>
+                <div class="offer-items-list">
+                  ✓ Pastillas de freno delanteras<br />
+                  ✓ Filtro de aceite
+                </div>
+              </div>
+
+              <div class="offer-details">
+                <div class="detail-item">
+                  <span class="detail-icon">📦</span>
+                  <span
+                    ><span class="detail-value">Nuevo</span> - Original</span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">🚚</span>
+                  <span
+                    >Entrega: <span class="detail-value">24 horas</span></span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">✅</span>
+                  <span
+                    >Garantía: <span class="detail-value">6 meses</span></span
+                  >
+                </div>
+              </div>
+
+              <div class="offer-description">
+                Repuestos importados directos. Mejor calidad-precio. Envío
+                gratis dentro de Santiago. Factura incluida.
+              </div>
+
+              <div class="offer-actions">
+                <button
+                  class="btn btn-secondary"
+                  onclick="contactVendor('Import Repuestos')"
+                >
+                  💬 Contactar
+                </button>
+                <button
+                  class="btn btn-primary"
+                  onclick="selectOffer(4, 47000, 'Import Repuestos')"
+                >
+                  Elegir esta oferta
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Offer 5 -->
+            <div class="offer-card" data-price="55000" data-time="inmediato">
+              <div class="offer-header">
+                <div class="vendor-info">
+                  <div class="vendor-name">Taller Express</div>
+                  <div class="vendor-rating">⭐⭐⭐⭐ <span>(4.6)</span></div>
+                </div>
+                <div class="price-tag">
+                  <div class="price-label">Precio total</div>
+                  <div class="price-value">$55.000</div>
+                </div>
+              </div>
+
+              <div class="offer-items">
+                <div class="offer-items-title">📦 Incluye:</div>
+                <div class="offer-items-list">
+                  ✓ Pastillas de freno delanteras<br />
+                  ✓ Filtro de aceite<br />
+                  ✓ Instalación incluida
+                </div>
+              </div>
+
+              <div class="offer-details">
+                <div class="detail-item">
+                  <span class="detail-icon">📦</span>
+                  <span
+                    ><span class="detail-value">Nuevo</span> + Instalación</span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">🚚</span>
+                  <span
+                    >Servicio: <span class="detail-value">Hoy mismo</span></span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">✅</span>
+                  <span
+                    >Garantía: <span class="detail-value">6 meses</span></span
+                  >
+                </div>
+              </div>
+
+              <div class="offer-description">
+                Servicio completo con instalación. Trae tu auto y lo dejamos
+                listo en 2 horas. Repuestos + mano de obra todo incluido.
+              </div>
+
+              <div class="offer-actions">
+                <button
+                  class="btn btn-secondary"
+                  onclick="contactVendor('Taller Express')"
+                >
+                  💬 Contactar
+                </button>
+                <button
+                  class="btn btn-primary"
+                  onclick="selectOffer(5, 55000, 'Taller Express')"
+                >
+                  Elegir esta oferta
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmModal">
+      <div class="modal-content">
+        <div class="modal-icon">💰</div>
+        <h2 class="modal-title">Confirmar compra</h2>
+        <p class="modal-message">
+          Estás a punto de aceptar esta oferta y proceder al pago.
+        </p>
+
+        <div class="modal-highlight">
+          <div class="highlight-item">
+            <span class="highlight-label">Vendedor:</span>
+            <span class="highlight-value" id="modalVendor">-</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-label">Precio total:</span>
+            <span class="highlight-value" id="modalPrice">$0</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-label">Comisión (3%):</span>
+            <span class="highlight-value" id="modalFee">$0</span>
+          </div>
+          <div
+            class="highlight-item"
+            style="
+              border-top: 2px solid var(--dark);
+              padding-top: 0.5rem;
+              margin-top: 0.5rem;
+            "
+          >
+            <span class="highlight-label"><strong>Total a pagar:</strong></span>
+            <span
+              class="highlight-value"
+              style="color: var(--secondary); font-size: 1.3rem"
+              id="modalTotal"
+              >$0</span
+            >
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">
+            Cancelar
+          </button>
+          <button class="btn btn-primary" onclick="proceedToPayment()">
+            Proceder al pago
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let selectedOfferData = {};
+
+      function sortOffers(criteria) {
+        const grid = document.getElementById("offersGrid");
+        const offers = Array.from(grid.children);
+
+        offers.sort((a, b) => {
+          if (criteria === "mejor") {
+            return parseInt(a.dataset.price) - parseInt(b.dataset.price);
+          } else if (criteria === "tiempo") {
+            const timeOrder = { inmediato: 1, "24h": 2, "48h": 3 };
+            return timeOrder[a.dataset.time] - timeOrder[b.dataset.time];
+          }
+          return 0; // reciente mantiene orden original
+        });
+
+        offers.forEach((offer) => grid.appendChild(offer));
+      }
+
+      function contactVendor(vendorName) {
+        // Simular contacto por WhatsApp
+        alert(`Abriendo WhatsApp para contactar a ${vendorName}...`);
+        // En producción: window.open('https://wa.me/56912345678?text=...');
+      }
+
+      function selectOffer(offerId, price, vendorName) {
+        selectedOfferData = {
+          id: offerId,
+          price: price,
+          vendor: vendorName,
+        };
+
+        // Calcular comisión (3%)
+        const fee = Math.round(price * 0.03);
+        const total = price + fee;
+
+        // Actualizar modal
+        document.getElementById("modalVendor").textContent = vendorName;
+        document.getElementById(
+          "modalPrice"
+        ).textContent = `${price.toLocaleString("es-CL")}`;
+        document.getElementById("modalFee").textContent = `${fee.toLocaleString(
+          "es-CL"
+        )}`;
+        document.getElementById(
+          "modalTotal"
+        ).textContent = `${total.toLocaleString("es-CL")}`;
+
+        // Mostrar modal
+        document.getElementById("confirmModal").classList.add("show");
+      }
+
+      function closeModal() {
+        document.getElementById("confirmModal").classList.remove("show");
+      }
+
+      function proceedToPayment() {
+        // Redirigir al checkout con los datos de la oferta
+        const offerParams = new URLSearchParams({
+          offerId: selectedOfferData.id,
+          vendor: selectedOfferData.vendor,
+          price: selectedOfferData.price,
+        });
+
+        window.location.href = "checkout.html?" + offerParams.toString();
+
+        // En producción con backend:
+        // window.location.href = '/checkout?offer=' + selectedOfferData.id;
+      }
+
+      // Simular carga desde hash
+      const urlHash = window.location.hash || "#xyz789abc";
+      console.log("Hash de la solicitud del cliente:", urlHash);
+    </script>
+  </body>
+</html>

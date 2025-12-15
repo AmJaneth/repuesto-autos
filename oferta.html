@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solicitud de Repuestos - RepuestosYa</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #2563eb;
+        --secondary: #f59e0b;
+        --dark: #0f172a;
+        --light: #f8fafc;
+        --accent: #10b981;
+        --gray: #64748b;
+        --error: #ef4444;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+        padding: 2rem 1rem;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: fadeInDown 0.6s ease;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .logo span {
+        color: var(--secondary);
+      }
+
+      .subtitle {
+        color: var(--gray);
+        font-size: 1.05rem;
+      }
+
+      /* Alert Banner */
+      .alert-banner {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        border-left: 4px solid var(--secondary);
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        animation: fadeInUp 0.6s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .alert-icon {
+        font-size: 2rem;
+      }
+
+      .alert-content {
+        flex: 1;
+      }
+
+      .alert-title {
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.25rem;
+      }
+
+      .alert-text {
+        color: #78716c;
+        font-size: 0.95rem;
+      }
+
+      /* Card */
+      .card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.6s ease 0.1s both;
+        margin-bottom: 2rem;
+      }
+
+      .card-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 1rem;
+      }
+
+      .card-description {
+        color: var(--gray);
+        margin-bottom: 2rem;
+      }
+
+      /* Info Boxes */
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .info-box {
+        background: var(--light);
+        padding: 1.25rem;
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+      }
+
+      .info-label {
+        font-size: 0.85rem;
+        color: var(--gray);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .info-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      /* Section */
+      .section {
+        margin-bottom: 2.5rem;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      .section-icon {
+        font-size: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      /* Repuesto Items */
+      .repuesto-card {
+        background: var(--light);
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .repuesto-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1rem;
+      }
+
+      .repuesto-number {
+        background: var(--secondary);
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+
+      .repuesto-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .repuesto-description {
+        color: var(--gray);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+
+      .repuesto-photo {
+        width: 100%;
+        max-width: 300px;
+        height: 200px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gray);
+        font-size: 0.9rem;
+        margin-top: 1rem;
+      }
+
+      /* Offer Form */
+      .offer-form {
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        padding: 2rem;
+        border-radius: 15px;
+        border: 2px solid #bfdbfe;
+      }
+
+      .offer-form-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-group.full-width {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+      }
+
+      .required {
+        color: var(--error);
+      }
+
+      input[type="text"],
+      input[type="number"],
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+        font-family: inherit;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      select {
+        appearance: none;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2364748B"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 20px;
+        cursor: pointer;
+      }
+
+      .help-text {
+        font-size: 0.85rem;
+        color: var(--gray);
+        margin-top: 0.5rem;
+      }
+
+      .price-input-wrapper {
+        position: relative;
+      }
+
+      .price-symbol {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        font-weight: 600;
+      }
+
+      input[type="number"] {
+        padding-left: 2.5rem;
+      }
+
+      /* Checkbox */
+      .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+        padding: 1rem;
+        background: white;
+        border-radius: 10px;
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        width: auto;
+        margin-top: 0.25rem;
+        cursor: pointer;
+      }
+
+      .checkbox-group label {
+        margin: 0;
+        font-weight: 400;
+        cursor: pointer;
+      }
+
+      /* Submit Button */
+      .submit-button {
+        width: 100%;
+        padding: 1.25rem 2rem;
+        background: var(--secondary);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .submit-button:hover {
+        background: #d97706;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+      }
+
+      .submit-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .submit-button.loading::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border: 3px solid white;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Success Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.8);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal.show {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        animation: slideUp 0.4s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .success-icon {
+        width: 100px;
+        height: 100px;
+        background: var(--accent);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 4rem;
+        animation: scaleIn 0.5s ease;
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+
+      .modal-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 1rem;
+      }
+
+      .modal-message {
+        color: var(--gray);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .modal-highlight {
+        background: var(--light);
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1.5rem 0;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem 0.5rem;
+        }
+
+        .card {
+          padding: 2rem 1.5rem;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .card-title {
+          font-size: 1.5rem;
+        }
+
+        .modal-content {
+          padding: 2rem 1.5rem;
+        }
+      }
+
+      /* Timer */
+      .timer-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">Repuestos<span>Ya</span></div>
+        <p class="subtitle">Solicitud de repuestos</p>
+      </div>
+
+      <!-- Alert Banner -->
+      <div class="alert-banner">
+        <div class="alert-icon">⏱️</div>
+        <div class="alert-content">
+          <div class="alert-title">¡Solicitud reciente!</div>
+          <div class="alert-text">
+            Esta solicitud fue publicada hace <strong>15 minutos</strong>. Sé el
+            primero en ofertar y aumenta tus posibilidades de venta.
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Card -->
+      <div class="card">
+        <h1 class="card-title">Solicitud de Repuestos #12345</h1>
+        <p class="card-description">
+          Un cliente está buscando los siguientes repuestos. Revisa los detalles
+          y envía tu mejor oferta.
+        </p>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+          <div class="info-box">
+            <div class="info-label">🚗 Vehículo</div>
+            <div class="info-value">Toyota Corolla 2018</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">📍 Ubicación</div>
+            <div class="info-value">Santiago, RM</div>
+          </div>
+          <div class="info-box">
+            <div class="info-label">📦 Repuestos</div>
+            <div class="info-value">2 items</div>
+          </div>
+        </div>
+
+        <!-- Repuestos Section -->
+        <div class="section">
+          <div class="section-header">
+            <span class="section-icon">📦</span>
+            <h2 class="section-title">Repuestos Solicitados</h2>
+          </div>
+
+          <!-- Repuesto 1 -->
+          <div class="repuesto-card">
+            <div class="repuesto-header">
+              <div>
+                <div class="repuesto-number">1</div>
+              </div>
+            </div>
+            <h3 class="repuesto-name">Pastillas de freno delanteras</h3>
+            <p class="repuesto-description">
+              Para Toyota Corolla 2018, sistema de freno de disco. Prefiere
+              original o de buena calidad compatible.
+            </p>
+            <div class="repuesto-photo">📷 Foto no disponible</div>
+          </div>
+
+          <!-- Repuesto 2 -->
+          <div class="repuesto-card">
+            <div class="repuesto-header">
+              <div>
+                <div class="repuesto-number">2</div>
+              </div>
+            </div>
+            <h3 class="repuesto-name">Filtro de aceite</h3>
+            <p class="repuesto-description">
+              Filtro de aceite para motor 1.8L. Original Toyota o marca
+              compatible de calidad.
+            </p>
+          </div>
+        </div>
+
+        <!-- Offer Form -->
+        <div class="offer-form">
+          <h2 class="offer-form-title">💰 Envía tu oferta</h2>
+
+          <form id="ofertaForm">
+            <div class="form-group">
+              <label
+                >¿Qué repuestos puedes ofrecer?
+                <span class="required">*</span></label
+              >
+              <select id="repuestosOferta" required>
+                <option value="">Selecciona una opción</option>
+                <option value="todos">Todos los repuestos (1 y 2)</option>
+                <option value="1">Solo: Pastillas de freno</option>
+                <option value="2">Solo: Filtro de aceite</option>
+              </select>
+              <p class="help-text">Puedes ofertar por uno o varios repuestos</p>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label
+                  >Precio total de tu oferta
+                  <span class="required">*</span></label
+                >
+                <div class="price-input-wrapper">
+                  <span class="price-symbol">$</span>
+                  <input
+                    type="number"
+                    id="precio"
+                    placeholder="35000"
+                    required
+                    min="0"
+                  />
+                </div>
+                <p class="help-text">
+                  CLP - Precio por todos los items ofertados
+                </p>
+              </div>
+
+              <div class="form-group">
+                <label>Condición <span class="required">*</span></label>
+                <select id="condicion" required>
+                  <option value="">Selecciona</option>
+                  <option value="nuevo">Nuevo</option>
+                  <option value="original">Original de fábrica</option>
+                  <option value="remanufacturado">Remanufacturado</option>
+                  <option value="usado">Usado (buen estado)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tiempo de entrega <span class="required">*</span></label>
+                <select id="tiempoEntrega" required>
+                  <option value="">Selecciona</option>
+                  <option value="inmediato">Disponible ahora</option>
+                  <option value="24h">24 horas</option>
+                  <option value="48h">48 horas</option>
+                  <option value="3-5dias">3-5 días</option>
+                  <option value="consultar">A consultar</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Garantía</label>
+                <select id="garantia">
+                  <option value="">Sin garantía</option>
+                  <option value="30dias">30 días</option>
+                  <option value="3meses">3 meses</option>
+                  <option value="6meses">6 meses</option>
+                  <option value="1ano">1 año</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Información adicional</label>
+              <textarea
+                id="infoAdicional"
+                placeholder="Agrega detalles sobre los repuestos, marca, origen, etc."
+              ></textarea>
+            </div>
+
+            <div class="checkbox-group">
+              <input type="checkbox" id="disponibilidad" required />
+              <label for="disponibilidad">
+                Confirmo que tengo disponibilidad inmediata de estos repuestos
+              </label>
+            </div>
+
+            <button type="submit" class="submit-button">
+              Enviar oferta al cliente
+              <span>📤</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+      <div class="modal-content">
+        <div class="success-icon">✓</div>
+        <h2 class="modal-title">¡Oferta enviada!</h2>
+        <p class="modal-message">
+          Tu oferta fue enviada exitosamente al cliente.
+        </p>
+        <div class="modal-highlight">
+          El cliente recibirá una notificación por WhatsApp ahora mismo
+        </div>
+        <p class="modal-message">
+          Te notificaremos si el cliente acepta tu oferta.<br />
+          Mantén tu WhatsApp activo para recibir la confirmación.
+        </p>
+        <button
+          class="submit-button"
+          onclick="window.location.href='vista_whasapCliente.html'"
+        >
+          Entendido
+          <span>👍</span>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Simular carga de datos desde el hash
+      const urlHash = window.location.hash || "#abc123xyz";
+      console.log("Hash de la solicitud:", urlHash);
+
+      // Submit del formulario
+      document
+        .getElementById("ofertaForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Validar checkbox
+          const disponibilidad = document.getElementById("disponibilidad");
+          if (!disponibilidad.checked) {
+            alert("Debes confirmar la disponibilidad de los repuestos");
+            return;
+          }
+
+          const submitBtn = this.querySelector(".submit-button");
+          submitBtn.classList.add("loading");
+          submitBtn.disabled = true;
+
+          // Recolectar datos de la oferta
+          const ofertaData = {
+            solicitudHash: urlHash.replace("#", ""),
+            repuestosOfertados:
+              document.getElementById("repuestosOferta").value,
+            precio: document.getElementById("precio").value,
+            condicion: document.getElementById("condicion").value,
+            tiempoEntrega: document.getElementById("tiempoEntrega").value,
+            garantia: document.getElementById("garantia").value,
+            infoAdicional: document.getElementById("infoAdicional").value,
+          };
+
+          console.log("Datos de la oferta:", ofertaData);
+
+          // Simular envío a la API
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+
+          // TODO: Aquí iría la llamada real a tu API .NET
+          // const response = await fetch('/api/ofertas', {
+          //     method: 'POST',
+          //     headers: { 'Content-Type': 'application/json' },
+          //     body: JSON.stringify(ofertaData)
+          // });
+
+          // Mostrar modal de éxito
+          document.getElementById("successModal").classList.add("show");
+        });
+
+      // Actualizar ayuda según repuestos seleccionados
+      document
+        .getElementById("repuestosOferta")
+        .addEventListener("change", function () {
+          const helpText = this.parentElement.querySelector(".help-text");
+          if (this.value === "todos") {
+            helpText.textContent = "Precio por ambos repuestos";
+          } else if (this.value) {
+            helpText.textContent = "Precio solo por el repuesto seleccionado";
+          }
+        });
+    </script>
+  </body>
+</html>

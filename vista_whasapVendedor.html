@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mensaje WhatsApp - Vendedor</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: #0a0e27;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+      }
+
+      .mockup-section {
+        animation: fadeIn 0.6s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .section-title {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      .section-subtitle {
+        color: #64748b;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      /* WhatsApp Phone Mockup */
+      .phone-mockup {
+        background: white;
+        border-radius: 40px;
+        padding: 1rem;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        max-width: 380px;
+        margin: 0 auto;
+      }
+
+      .phone-screen {
+        background: #ece5dd;
+        border-radius: 30px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* WhatsApp Header */
+      .whatsapp-header {
+        background: #075e54;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: white;
+      }
+
+      .back-arrow {
+        font-size: 1.5rem;
+      }
+
+      .contact-info {
+        flex: 1;
+      }
+
+      .contact-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+
+      .contact-status {
+        font-size: 0.85rem;
+        opacity: 0.8;
+      }
+
+      /* Chat Area */
+      .chat-area {
+        padding: 1.5rem;
+        min-height: 500px;
+        background-image: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 10px,
+          rgba(0, 0, 0, 0.02) 10px,
+          rgba(0, 0, 0, 0.02) 20px
+        );
+      }
+
+      /* Message Bubble */
+      .message {
+        max-width: 85%;
+        margin-bottom: 1rem;
+        animation: slideIn 0.4s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message.received {
+        margin-right: auto;
+      }
+
+      .message-bubble {
+        background: white;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      .message-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: white;
+        font-size: 0.9rem;
+      }
+
+      .sender-name {
+        font-weight: 700;
+        color: #0f172a;
+        font-size: 0.95rem;
+      }
+
+      .message-content {
+        color: #1f2937;
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+
+      .message-content strong {
+        color: #0f172a;
+        display: block;
+        margin-top: 0.5rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .highlight-box {
+        background: #fef3c7;
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin: 0.75rem 0;
+        border-left: 3px solid #f59e0b;
+      }
+
+      .highlight-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.35rem;
+        font-size: 0.9rem;
+      }
+
+      .highlight-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .highlight-label {
+        color: #78716c;
+      }
+
+      .highlight-value {
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      .repuesto-list {
+        background: #f1f5f9;
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin: 0.75rem 0;
+      }
+
+      .repuesto-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .repuesto-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .repuesto-name {
+        font-weight: 600;
+        color: #0f172a;
+        margin-bottom: 0.25rem;
+      }
+
+      .repuesto-desc {
+        font-size: 0.85rem;
+        color: #64748b;
+      }
+
+      .cta-button {
+        display: block;
+        background: #f59e0b;
+        color: white;
+        text-align: center;
+        padding: 0.875rem;
+        border-radius: 8px;
+        font-weight: 700;
+        text-decoration: none;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .message-time {
+        font-size: 0.7rem;
+        color: #9ca3af;
+        text-align: right;
+        margin-top: 0.5rem;
+      }
+
+      /* Info Panel */
+      .info-panel {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      }
+
+      .info-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 1rem;
+      }
+
+      .info-description {
+        color: #64748b;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+      }
+
+      .info-section {
+        margin-bottom: 2rem;
+      }
+
+      .info-section-title {
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .info-list {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .info-list li {
+        padding: 0.5rem 0;
+        color: #475569;
+        position: relative;
+        padding-left: 1.5rem;
+      }
+
+      .info-list li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: 700;
+      }
+
+      .warning-box {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1.5rem;
+      }
+
+      .warning-title {
+        font-weight: 700;
+        color: #92400e;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .warning-text {
+        color: #78716c;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .tech-note {
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 2rem;
+      }
+
+      .tech-note-title {
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 0.5rem;
+      }
+
+      .tech-note-text {
+        color: #475569;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .tech-note code {
+        background: #dbeafe;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        color: #1e40af;
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+
+        .phone-mockup {
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- WhatsApp Mockup -->
+      <div class="mockup-section">
+        <h2 class="section-title">📱 Vista del Vendedor</h2>
+        <p class="section-subtitle">Así se ve el mensaje en WhatsApp</p>
+
+        <div class="phone-mockup">
+          <div class="phone-screen">
+            <!-- WhatsApp Header -->
+            <div class="whatsapp-header">
+              <div class="back-arrow">←</div>
+              <div class="contact-info">
+                <div class="contact-name">RepuestosYa</div>
+                <div class="contact-status">en línea</div>
+              </div>
+            </div>
+
+            <!-- Chat Area -->
+            <div class="chat-area">
+              <div class="message received">
+                <div class="message-bubble">
+                  <div class="message-header">
+                    <div class="logo-icon">RY</div>
+                    <div class="sender-name">RepuestosYa</div>
+                  </div>
+
+                  <div class="message-content">
+                    🔔 <strong>Nueva solicitud de repuestos</strong>
+
+                    Un cliente está buscando repuestos para su vehículo:
+
+                    <div class="highlight-box">
+                      <div class="highlight-item">
+                        <span class="highlight-label">🚗 Vehículo:</span>
+                        <span class="highlight-value">Toyota Corolla 2018</span>
+                      </div>
+                      <div class="highlight-item">
+                        <span class="highlight-label">📍 Ubicación:</span>
+                        <span class="highlight-value">Santiago, RM</span>
+                      </div>
+                      <div class="highlight-item">
+                        <span class="highlight-label">⏰ Hace:</span>
+                        <span class="highlight-value">2 minutos</span>
+                      </div>
+                    </div>
+
+                    <strong>📦 Repuestos solicitados:</strong>
+                    <div class="repuesto-list">
+                      <div class="repuesto-item">
+                        <div class="repuesto-name">
+                          1. Pastillas de freno delanteras
+                        </div>
+                        <div class="repuesto-desc">
+                          Para Toyota Corolla, freno de disco
+                        </div>
+                      </div>
+                      <div class="repuesto-item">
+                        <div class="repuesto-name">2. Filtro de aceite</div>
+                        <div class="repuesto-desc">Original o compatible</div>
+                      </div>
+                    </div>
+
+                    <strong>💡 ¿Tienes estos repuestos?</strong>
+                    Haz clic en el botón para ver todos los detalles y enviar tu
+                    oferta.
+
+                    <a href="oferta.html?abc123xyz" class="cta-button">
+                      👉 Ver solicitud y ofertar
+                    </a>
+                  </div>
+
+                  <div class="message-time">14:23</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Panel -->
+      <div class="mockup-section">
+        <div class="info-panel">
+          <h2 class="info-title">Detalles del Mensaje</h2>
+          <p class="info-description">
+            Este mensaje se envía automáticamente a todos los vendedores que
+            tengan registrados repuestos compatibles con el vehículo del
+            cliente.
+          </p>
+
+          <div class="info-section">
+            <h3 class="info-section-title">✨ Características del mensaje</h3>
+            <ul class="info-list">
+              <li>Información clara y concisa del vehículo</li>
+              <li>Lista detallada de todos los repuestos solicitados</li>
+              <li>Ubicación del cliente para calcular envíos</li>
+              <li>Timestamp de la solicitud</li>
+              <li>Link directo para ofertar (con hash único)</li>
+            </ul>
+          </div>
+
+          <div class="info-section">
+            <h3 class="info-section-title">🔐 Seguridad</h3>
+            <ul class="info-list">
+              <li>El link contiene un hash único y temporal</li>
+              <li>No requiere login del vendedor</li>
+              <li>Expira en 24 horas si no hay ofertas</li>
+              <li>El vendedor solo ve datos necesarios</li>
+            </ul>
+          </div>
+
+          <div class="warning-box">
+            <div class="warning-title">⚠️ Importante</div>
+            <div class="warning-text">
+              El mensaje debe estar pre-aprobado como plantilla en WhatsApp
+              Business API. No puede contener variables dinámicas no
+              autorizadas.
+            </div>
+          </div>
+
+          <div class="tech-note">
+            <div class="tech-note-title">🔧 Implementación Técnica</div>
+            <div class="tech-note-text">
+              El link incluye el hash: <code>oferta/abc123xyz</code><br /><br />
+              Este hash se genera cuando se crea la solicitud y se asocia a:
+              <ul style="margin-top: 0.5rem; padding-left: 1.5rem">
+                <li>ID de la solicitud</li>
+                <li>Lista de repuestos</li>
+                <li>Datos del vehículo</li>
+                <li>Vendedor específico (para tracking)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
